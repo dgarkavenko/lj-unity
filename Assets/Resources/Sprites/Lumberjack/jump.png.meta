@@ -1,6 +1,12 @@
 fileFormatVersion: 2
 guid: ffd28a8c4e183ca4091fa3a7c59c82d1
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: jump_0
+    21300002: jump_1
+    21300004: jump_2
+    21300006: jump_3
+    21300008: jump_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -36,7 +42,7 @@ TextureImporter:
   alignment: 7
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 1
+  spritePixelsToUnits: 10
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []

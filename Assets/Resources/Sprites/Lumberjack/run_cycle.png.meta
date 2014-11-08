@@ -1,6 +1,19 @@
 fileFormatVersion: 2
 guid: e8251edb2b8219548b8633e61fa6f67a
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: run_cycle_0
+    21300002: run_cycle_1
+    21300004: run_cycle_2
+    21300006: run_cycle_3
+    21300008: run_cycle_4
+    21300010: run_cycle_5
+    21300012: run_cycle_6
+    21300014: run_cycle_7
+    21300016: run_cycle_8
+    21300018: run_cycle_9
+    21300020: run_cycle_10
+    21300022: run_cycle_11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -36,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 1
+  spritePixelsToUnits: 10
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []

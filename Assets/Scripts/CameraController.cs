@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
+    static int PIXELS_IN_METER = 10;
 
     Camera cam;
     public float scale = 1f;
@@ -13,7 +14,7 @@ public class CameraController : MonoBehaviour {
 
 	void Start () {
         cam = GetComponent<Camera>();
-        cam.orthographicSize = Screen.height * 0.5f / scale;
+        cam.orthographicSize = Screen.height * 0.5f / scale / PIXELS_IN_METER;
 
 
         foreach (var item in System.Environment.GetCommandLineArgs())
@@ -32,6 +33,6 @@ public class CameraController : MonoBehaviour {
 	
 	
 	void Update () {
-        if (update) cam.orthographicSize = Screen.height * 0.5f / scale;	
+        if (update) cam.orthographicSize = Screen.height * 0.5f / scale / PIXELS_IN_METER;	
 	}
 }
