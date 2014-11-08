@@ -5,6 +5,8 @@ public class LegsController : MonoBehaviour {
 
     public Animator animator;
 
+    public System.Action<int> directionChangedEvent;
+
     public enum Direction
     {
         left = -1,
@@ -22,6 +24,10 @@ public class LegsController : MonoBehaviour {
             if (viewDirection != value)
             {
                 viewDirection = value;
+                if (directionChangedEvent != null)
+                {
+                    directionChangedEvent(value);
+                }
                 transform.localScale = new Vector3(value, 1, 1);
             }
         }

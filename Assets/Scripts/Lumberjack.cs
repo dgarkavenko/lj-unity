@@ -14,8 +14,13 @@ public class Lumberjack : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        legs.directionChangedEvent += OnMovementDirectionChanged;
 	}
+
+    private void OnMovementDirectionChanged(int dir)
+    {
+        body.localScale = new Vector3(ViewDirection * legs.ViewDirection, 1, 1);
+    }
 
     void Update()
     {

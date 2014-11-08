@@ -18,7 +18,7 @@ public class HandsController : MonoBehaviour {
     public void ManualUpdate(Vector3 pivotScreenPosition)
     {
         float rad = Mathf.Atan2(Input.mousePosition.y - pivotScreenPosition.y, Input.mousePosition.x - pivotScreenPosition.x);
-        BruteRotation(Rad180(rad));
+        BruteRotation(Mathf.Abs(Rad180(rad)));
     }
 	
     private float Rad180(float radian) {
