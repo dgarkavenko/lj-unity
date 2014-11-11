@@ -27,7 +27,7 @@ public class Lumberjack : MonoBehaviour, IInteractiveObject
     {
         var pivotScreenPosition = Camera.main.WorldToScreenPoint(pivot.position);
         ViewDirection = pivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
-        hands.ManualUpdate(pivotScreenPosition);
+		hands.ManualUpdate(pivotScreenPosition, pivot.position);
     }
 
     private int viewDirection;

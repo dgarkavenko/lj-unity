@@ -5,21 +5,41 @@ public class HandsController : MonoBehaviour {
 
 
 
-    public Sprite[] pistolFrames;
+    public Sprite[] currentWeaponFrames;
     public Transform pivot;
     private SpriteRenderer renderer;
+
+	private Weapon currentEquip;
 
 	// Use this for initialization
 	void Start () {
         renderer = GetComponent<SpriteRenderer>();
-        renderer.sprite = pistolFrames[5];
+
+		currentEquip = new Gun();
+		GunData gd = new GunData();
+		gd.ammo_current = 100;
+		gd.ammo_max = 100;
+		gd.reload_time = 2;
+		gd.rate = 240;
+
+		currentEquip.SetWeapon(gd);
 	}
 
-    public void ManualUpdate(Vector3 pivotScreenPosition)
+    public void ManualUpdate(Vector3 pivotScreenPosition, Vector3 pivotPosition)
     {
+		//View update
         float rad = Mathf.Atan2(Input.mousePosition.y - pivotScreenPosition.y, Input.mousePosition.x - pivotScreenPosition.x);
         BruteRotation(Mathf.Abs(Rad180(rad)));
+
+		if (currentEquip != null)
+			currentEquip.ManualUpdate (pivotScreenPosition, pivotPosition);
+
     }
+
+	void Reload ()
+	{
+
+	}
 	
     private float Rad180(float radian) {
             float degree = 90f + radian * Mathf.Rad2Deg;		
@@ -40,9 +60,9 @@ public class HandsController : MonoBehaviour {
 				f = 3;
 			}else if (degree < 67.5) {
 				f = 4;
-			}else if (degree < 82.5) {
+			}else if (degree < 85.5) {//83.5
 				f = 5;
-			}else if (degree < 97.5) {
+			}else if (degree < 98.5) {//97.5
 				f = 6;
 			}else if (degree < 112.5) {
 				f = 7;
@@ -57,7 +77,7 @@ public class HandsController : MonoBehaviour {
 			}else
 				f = 12;
 
-            renderer.sprite = pistolFrames[f];
+            renderer.sprite = currentWeaponFrames[f];
 		}
     
 	
