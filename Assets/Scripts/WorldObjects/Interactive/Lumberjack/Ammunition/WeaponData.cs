@@ -8,13 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
 
+[System.Serializable]
 public class WeaponData
 {
 	public int price;
 	public bool bought = false;
 	public string alias;
 	public DeadlyThings.Types type;
+    
 
 	public WeaponData ()
 	{

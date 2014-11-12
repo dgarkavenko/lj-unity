@@ -15,7 +15,7 @@ public class DeadlyThings
 	[Flags]
 	public enum Types
 	{
-		pistol = 0,
+        pistol = 2 * 4096,
 		revolver = 1,
 		shotgun = 2,
 		spas = 4,

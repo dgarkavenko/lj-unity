@@ -12,10 +12,11 @@ using UnityEngine;
 
 public class Weapon
 {
-	protected DeadlyThings.Types relatedTypes;
+    protected DeadlyThings.Types relatedTypes;
 	protected int rayCastDistance;
+    public SpriteRenderer renderer;
 
-	public virtual void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPosition){
+	public virtual void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPositionm){
 	}
 
 	public virtual void SetWeapon(WeaponData wd){

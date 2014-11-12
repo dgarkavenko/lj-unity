@@ -8,7 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
 
+[System.Serializable]
 public class GunData : WeaponData
 {
 	public enum Mode{
@@ -28,9 +30,9 @@ public class GunData : WeaponData
 	public float force;
 	public float recoilPerShot;
 	public float recoilReduction;
-
 	public float reload_time_left;
-
+    public Vector2[] gunpoints;
+    public Sprite[] frames;
 
 }
 
