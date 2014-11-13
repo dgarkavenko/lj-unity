@@ -6,13 +6,17 @@ public class TreeGenerator : MonoBehaviour
 	public int startX;
 	public int endX;
 	public int quantity;
+	public int minHeight;
+	public int maxHeight;
+	public int narrowestDistance;
+	public int widestDistance;
 	public SpriteRenderer baseTrunk;
 	public ForestTree treeSource;
 	static string[] layers = { "Foreground Trees", "Trees" };
 	static int[] widths = { 8, 18, 28, 37 };
 
 
-	void Generate(int width, int height, Vector3 position)
+	void GenerateOneTree(int width, int height, Vector3 position)
 	{
 		string sortingLayer = layers[Random.Range(0, layers.Length)];
 
@@ -58,7 +62,7 @@ public class TreeGenerator : MonoBehaviour
 			treetop.sortingLayerName = sortingLayer;
 			treetop.sortingOrder = 1;
 			treetop.transform.parent = tree.transform;
-			treetop.transform.localPosition = new Vector3((-treetopSprite.rect.width / 2) / 10f, height / 10f, 0);
+			treetop.transform.localPosition = new Vector3((-treetopSprite.rect.width / 2) / 10f, resultHeight / 10f, 0);
 			treetop.transform.localScale = Vector3.one;
 		}
 
@@ -70,13 +74,24 @@ public class TreeGenerator : MonoBehaviour
 	}
 
 
-	void OnEnable()
+
+	void GenerateTrees()
 	{
 		float x = startX;
-
+		
 		for (int i = 0; i < quantity; ++i) {
-			Generate(widths[Random.Range(0, widths.Length)], Random.Range(0, 200), new Vector3(x, 0, 0));
-			x += ((endX - startX) / (float)quantity) * i + Random.Range(-10, 10);
+			GenerateOneTree(widths[Random.Range(0, widths.Length)], Random.Range(minHeight, maxHeight), new Vector3(x, 0, 0));
+			float distanceToNextTree = ((endX - startX) / (float)quantity) + Random.Range(-10, 10);
+			x += Mathf.Clamp(distanceToNextTree, narrowestDistance, widestDistance);
+//			Debug.Log("Generated tree " + i + ".");
+//			yield return null;
 		}
+	}
+
+
+	void OnEnable()
+	{
+//		StartCoroutine(GenerateTrees());
+		GenerateTrees();
 	}
 }
