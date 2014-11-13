@@ -66,6 +66,20 @@ public class TreeGenerator : MonoBehaviour
 			treetop.transform.localScale = Vector3.one;
 		}
 
+		var rootsSprite = Resources.Load<Sprite>("Visual/Environment/Trees/roots_w" + width);
+		
+		if (rootsSprite != null) {
+			var roots = ((SpriteRenderer)GameObject.Instantiate(baseTrunk));
+			
+			roots.name = "Roots";
+			roots.sprite = rootsSprite;
+			roots.sortingLayerName = sortingLayer;
+			roots.sortingOrder = 1;
+			roots.transform.parent = tree.transform;
+			roots.transform.localPosition = new Vector3((-rootsSprite.rect.width / 2) / 10f, 0, 0);
+			roots.transform.localScale = Vector3.one;
+		}
+
 		var collider = (BoxCollider2D)tree.collider2D;
 		collider.size = new Vector2(width / 10f, resultHeight / 10f);
 		collider.center = new Vector2(0, resultHeight / 20f);
