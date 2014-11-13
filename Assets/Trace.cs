@@ -27,9 +27,7 @@ public class Trace : MonoBehaviour {
     void Update()
     {       
         fadeTime--;
-        Debug.Log(fadeTime / fade);
         lr.materials[0].SetColor("_Color", Color.Lerp(c2, c1, fadeTime / fade));
-
         if (fadeTime <= 0) gameObject.SetActive(false);
         
     }

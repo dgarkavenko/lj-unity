@@ -119,6 +119,14 @@ public class Gun : Weapon
         {
             trace.Show(origin + dir, hit.point);
             hit.collider.rigidbody2D.AddForce(dir * 220);
+
+			GameObject vfx = GameObject.Instantiate(Resources.Load("Visual/VFX/Blood") as GameObject) as GameObject;
+			vfx.transform.position = hit.point;
+			vfx.particleSystem.Play();
+			vfx.particleSystem.renderer.sortingLayerName = "Dynamics";
+
+
+
         }
         else
             trace.Show(origin + dir, pivotPosition + dir * 100);

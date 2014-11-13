@@ -17,25 +17,18 @@ public class CameraController : MonoBehaviour {
         cam = GetComponent<Camera>();
         cam.orthographicSize = Screen.height * 0.5f / scale / PIXELS_IN_METER;
 
-
-        foreach (var item in System.Environment.GetCommandLineArgs())
-        {
-            s += ":::" + item;
-        }
 	}
 
 
     void OnGUI()
     {
 
-       
-        GUILayout.Label(s);
     }
 	
 	
-	void Update () {
+	/*void Update () {
         if (update) cam.orthographicSize = Screen.height * 0.5f / scale / PIXELS_IN_METER;
-	}
+	}*/
 
 
 	void FixedUpdate()
@@ -44,7 +37,8 @@ public class CameraController : MonoBehaviour {
 		var camPos = transform.position;
 		
 		if (target.x != camPos.x) {
-			camPos.x = Mathf.Lerp(camPos.x, target.x, 0.05f);
+			//camPos.x = Mathf.Lerp(camPos.x, target.x, 0.1f);
+			camPos.x = target.x;
 		}
 		
 		transform.position = camPos;
