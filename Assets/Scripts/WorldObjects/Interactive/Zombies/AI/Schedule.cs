@@ -11,6 +11,13 @@ public class Schedule {
 	}
 
 	public string name;
+
+	public string Status {
+		get {
+			return name + " (" + (taskIndex + 1) +" of " + tasks.Count + ")";
+		}
+	}
+
 	public delegate bool Task(BaseZombie actor);
 	public float[] taskTimeouts;
 
@@ -32,7 +39,7 @@ public class Schedule {
 
 	public bool IsInterrupted (EnemyConditions condition)
 	{
-		return (int)(condition & interruptors) != 0;
+		return (condition & interruptors) != 0;
 	}
 
 	bool TimedOut ()

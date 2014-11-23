@@ -18,9 +18,31 @@ public class ZombieMind
 	protected Schedule meleeAttack;
 	protected Schedule rangedAttack;
 
+	protected Transform ljTransform;
+
+
 	public ZombieMind ()
 	{
+		ljTransform = GameObject.Find ("Lumberjack").GetComponent<Transform>();
+	}
 
+	public EnemyConditions GetPositionConditions(BaseZombie actor){
+
+		EnemyConditions conditions = EnemyConditions.can_stand;
+
+		bool viewDirTowardsLj = ( actor.ViewDirection == 1 && actor.transform.position.x < ljTransform.position.x) || (actor.ViewDirection == -1 && actor.transform.position.x > ljTransform.position.x);
+
+		if (viewDirTowardsLj) {
+			float distance = Mathf.Abs (actor.transform.position.x - ljTransform.position.x);
+			if (distance <= actor.meleeAttackRange){
+				conditions = EnemyConditions.see_enemy;
+				conditions |= EnemyConditions.can_melee_attack;
+			}else if (distance < actor.viewRange || actor.worried || distance < actor.senceRange){
+				conditions = EnemyConditions.see_enemy;
+			}
+		}
+
+		return conditions;
 	}
 
 	public Schedule StandartStandSchedule{
@@ -51,6 +73,7 @@ public class ZombieMind
 			pursuit.interruptors = EnemyConditions.can_melee_attack | EnemyConditions.can_melee_attack;
 			pursuit.tasks.Add (OnInitPursuit);
 			pursuit.tasks.Add (OnPursuit);
+			//pursuit.taskTimeouts = new float[]{5,2};	
 			return pursuit;
 		}
 	}
@@ -60,10 +83,7 @@ public class ZombieMind
 	}
 	
 	public void SelectNewSchedule (BaseZombie actor)
-	{		
-
-		Debug.Log (actor.name + " selecting sch");
-
+	{	
 		if (ConditionMatches (EnemyConditions.can_melee_attack, actor))		
 		{
 			actor.state = EnemyState.melee;
@@ -94,11 +114,18 @@ public class ZombieMind
 	}
 
 	public bool OnInitPursuit(BaseZombie actor){
+		actor.worried = true;
 		return true;
 	}
 	
 	public bool OnPursuit(BaseZombie actor){
-		return true;
+
+
+		actor.ViewDirection = ljTransform.position.x < actor.transform.position.x ? -1 : 1;
+		if (Math.Abs(ljTransform.position.x - actor.transform.position.x) > actor.meleeAttackRange) {
+			actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
+		}
+		return false;
 	}
 	
 	public bool OnInitStand(BaseZombie actor){
@@ -115,11 +142,12 @@ public class ZombieMind
 	
 	public bool OnInitWalk(BaseZombie actor){
 		actor.currentSchedule.taskTimeouts[1] = UnityEngine.Random.Range (1f, 2f);
+		actor.ViewDirection = UnityEngine.Random.Range (0, 100) > 50 ? -1 : 1;
 		return true;
 	}
 	
 	public bool OnWalk(BaseZombie actor){
-		actor.rigidbody2D.velocity = new Vector2 (1, 0);
+		actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
 		return false;
 	}
 
