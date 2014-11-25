@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: a05e0cc82f4bef446a5c8bdb6e5342a8
+guid: 669179e7038e67348a317ef195b48946
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: mountains_source
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -41,11 +40,7 @@ TextureImporter:
   spritePixelsToUnits: 10
   alphaIsTransparency: 1
   textureType: 8
-  buildTargetSettings:
-  - buildTarget: iPhone
-    maxTextureSize: 1024
-    textureFormat: -2
-    compressionQuality: 50
+  buildTargetSettings: []
   spriteSheet:
     sprites: []
   spritePackingTag: 
