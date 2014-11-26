@@ -7,15 +7,50 @@ public class Lumberjack : MonoBehaviour, IInteractiveObject
 
 
     public LegsController legs;
-    public HandsController hands;
+
     public Transform body;
     public Transform pivot;
-   
+	public GameObject hands;
+	   
+	private Weapon currentEquipContainer;
+	private Weapon[] allEquipContainers;
+
+	// --- TEMP ---
 
 
-	// Use this for initialization
+
+	// --- TEMP ---
+
+
 	void Start () {
         legs.directionChangedEvent += OnMovementDirectionChanged;
+
+		allEquipContainers = new Weapon[]{new Gun (hands), new Axe (hands)};
+		currentEquipContainer = allEquipContainers [0];
+
+		GunData gd = GameplayData.Instance.guns[0];		
+		currentEquipContainer.SetWeapon(gd);
+	}
+
+	private void SelectWeapon(WeaponData wd){
+
+		Debug.Log ("Switching to: " + wd.alias);
+
+		foreach (var container in allEquipContainers) {
+			if((container.relatedTypes & wd.type) == wd.type){
+
+				if (currentEquipContainer != container)
+				{
+					currentEquipContainer.Kill();
+					currentEquipContainer = container;
+					currentEquipContainer.Init();
+				}
+
+				break;
+			}
+		}
+
+		currentEquipContainer.SetWeapon(wd);		
 	}
 
     private void OnMovementDirectionChanged(int dir)
@@ -27,11 +62,30 @@ public class Lumberjack : MonoBehaviour, IInteractiveObject
     {
         var pivotScreenPosition = Camera.main.WorldToScreenPoint(pivot.position);
         ViewDirection = pivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
-		hands.ManualUpdate(pivotScreenPosition, pivot.position);
+
+		int alpha1 = (int)KeyCode.Alpha1;
+
+		if (Input.anyKeyDown) {
+			for (int i = 0; i < 10; i++) {
+				if(Input.GetKey((KeyCode)(alpha1 + i))){
+					Debug.Log (i);
+					if (GameplayData.Instance.guns.Length > i){
+
+						SelectWeapon(GameplayData.Instance.guns[i]);
+					}else{
+						SelectWeapon(GameplayData.Instance.tools[i - GameplayData.Instance.guns.Length]);
+					}
+
+					break;
+				}
+			}
+		}
+
+		if (currentEquipContainer != null)
+			currentEquipContainer.ManualUpdate (pivotScreenPosition, pivot.position);
     }
 
     private int viewDirection;
-
     public int ViewDirection
     {
         get { return viewDirection; }

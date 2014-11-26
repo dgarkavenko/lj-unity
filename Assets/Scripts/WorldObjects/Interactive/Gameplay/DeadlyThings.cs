@@ -35,7 +35,7 @@ public class DeadlyThings
 	public static Types ANY_GUN = Types.pistol | Types.revolver | Types.shotgun | Types.spas | Types.assault | Types.barret | Types.uzi;
 	public static Types MELEE = Types.axe_rusty | Types.axe_fire | Types.chainsaw | Types.axe_double;	
 	public static Types ANY = EXPLOSIVES | ANY_GUN | MELEE | Types.treefall;
-
+	public static Types AXES = Types.axe_rusty | Types.axe_fire | Types.axe_double;
 }
 
 

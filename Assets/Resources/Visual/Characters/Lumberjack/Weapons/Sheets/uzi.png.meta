@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: f680a17f300ed134aa89b47526bf312c
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: uzi_0
+    21300002: uzi_1
+    21300004: uzi_2
+    21300006: uzi_3
+    21300008: uzi_4
+    21300010: uzi_5
+    21300012: uzi_6
+    21300014: uzi_7
+    21300016: uzi_8
+    21300018: uzi_9
+    21300020: uzi_10
+    21300022: uzi_11
+    21300024: uzi_12
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 10
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: uzi_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_1
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_2
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_3
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_4
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_5
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_7
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_8
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_9
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_10
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_11
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: uzi_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 224
+        width: 74
+        height: 96
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

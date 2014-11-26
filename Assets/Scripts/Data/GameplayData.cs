@@ -19,11 +19,12 @@ public class GameplayData : ScriptableObject {
                     AssetDatabase.CreateAsset(instance, "Assets/Resources/Data/Config.asset");
                     AssetDatabase.SaveAssets();
                 }
-            }
+            }		
 
             return instance;
         }
     }
 
     public GunData[] guns;
+	public ToolData[] tools;
 }

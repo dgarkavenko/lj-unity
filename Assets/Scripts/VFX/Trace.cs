@@ -9,7 +9,6 @@ public class Trace : MonoBehaviour {
     private float fadeTime;
 	// Use this for initialization
 	void Start () {
-        GameplayData g = GameplayData.Instance;
         lr = GetComponent<LineRenderer>();
 	}
 

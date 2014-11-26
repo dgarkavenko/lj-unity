@@ -12,18 +12,29 @@ using UnityEngine;
 
 public class Weapon
 {
-    protected DeadlyThings.Types relatedTypes;
+    public DeadlyThings.Types relatedTypes;
 	protected int rayCastDistance;
-    public SpriteRenderer renderer;
+    protected SpriteRenderer renderer;
+	protected Animator animator;
 
-	public virtual void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPositionm){
+	public virtual void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPosition){
 	}
 
 	public virtual void SetWeapon(WeaponData wd){
 	}
 
+	public Weapon(GameObject parent){
+		renderer = parent.GetComponent<SpriteRenderer>();
+		animator = parent.GetComponent<Animator>();
+	}
 
+	public virtual void Kill ()
+	{
+	}
 
+	public virtual void Init ()
+	{
+	}
 }
 
 

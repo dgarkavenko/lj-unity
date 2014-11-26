@@ -20,7 +20,7 @@ public class Gun : Weapon
 
     public Trace trace;
 
-	public Gun ()
+	public Gun (GameObject parent) : base (parent)
 	{
 		relatedTypes = DeadlyThings.ANY_GUN;
 		rayCastDistance = 100;
@@ -110,7 +110,7 @@ public class Gun : Weapon
 
         Vector2 dir = new Vector2(Mathf.Cos(dirPolar), Mathf.Sin(dirPolar));
 
-        Vector2 origin = renderer.transform.parent.transform.position;
+		Vector2 origin = renderer.transform.position;
         int intDir = Input.mousePosition.x > pivotScreenPosition.x ? 1 : -1;
         origin += new Vector2(gd.gunpoints[currentFrame].x * intDir, gd.gunpoints[currentFrame].y);
 
@@ -156,27 +156,27 @@ public class Gun : Weapon
     {
         if (degree < 7.5)
         {
-            currentFrame = 0;
+            currentFrame = 12;
         }
         else if (degree < 22.5)
         {
-            currentFrame = 1;
+            currentFrame = 11;
         }
         else if (degree < 37.5)
         {
-            currentFrame = 2;
+            currentFrame = 10;
         }
         else if (degree < 52.5)
         {
-            currentFrame = 3;
+            currentFrame = 9;
         }
         else if (degree < 67.5)
         {
-            currentFrame = 4;
+            currentFrame = 8;
         }
         else if (degree < 85.5)
         {//83.5
-            currentFrame = 5;
+            currentFrame = 7;
         }
         else if (degree < 98.5)
         {//97.5
@@ -184,26 +184,26 @@ public class Gun : Weapon
         }
         else if (degree < 112.5)
         {
-            currentFrame = 7;
+            currentFrame = 5;
         }
         else if (degree < 127.5)
         {
-            currentFrame = 8;
+            currentFrame = 4;
         }
         else if (degree < 142.5)
         {
-            currentFrame = 9;
+            currentFrame = 3;
         }
         else if (degree < 157.5)
         {
-            currentFrame = 10;
+            currentFrame = 2;
         }
         else if (degree < 172.5)
         {
-            currentFrame = 11;
+            currentFrame = 1;
         }
         else
-            currentFrame = 12;
+            currentFrame = 0;
 
         renderer.sprite = gd.frames[currentFrame];
     }

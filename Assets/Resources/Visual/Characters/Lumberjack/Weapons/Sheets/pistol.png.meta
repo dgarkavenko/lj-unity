@@ -35,7 +35,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -2
   maxTextureSize: 1024
   textureSettings:
     filterMode: 0
@@ -61,130 +61,130 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_1
       rect:
         serializedVersion: 2
-        x: 37
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        x: 74
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_2
       rect:
         serializedVersion: 2
-        x: 74
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        x: 148
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_3
       rect:
         serializedVersion: 2
-        x: 111
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        x: 222
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_4
       rect:
         serializedVersion: 2
-        x: 148
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        x: 296
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_5
       rect:
         serializedVersion: 2
-        x: 185
-        y: 114
-        width: 37
-        height: 57
-      alignment: 1
+        x: 370
+        y: 416
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_7
       rect:
         serializedVersion: 2
-        x: 37
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        x: 74
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_8
       rect:
         serializedVersion: 2
-        x: 74
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        x: 148
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_9
       rect:
         serializedVersion: 2
-        x: 111
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        x: 222
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_10
       rect:
         serializedVersion: 2
-        x: 148
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        x: 296
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_11
       rect:
         serializedVersion: 2
-        x: 185
-        y: 57
-        width: 37
-        height: 57
-      alignment: 1
+        x: 370
+        y: 320
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: pistol_12
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 37
-        height: 57
-      alignment: 1
+        y: 224
+        width: 74
+        height: 96
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
