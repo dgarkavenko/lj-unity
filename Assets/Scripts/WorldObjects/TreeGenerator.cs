@@ -46,6 +46,8 @@ public class TreeGenerator : MonoBehaviour
 				tile.transform.localPosition = new Vector3((-width / 2) / 10f, y / 10f, 0);
 				tile.transform.localScale = Vector3.one;
 
+				tree.AddTile(tile);
+
 				resultHeight += tileHeight;
 
 				++i;
