@@ -63,11 +63,15 @@ public class Schedule {
 			lastTaskStarTime = Time.time;
 		}
 
+		if (actor.debug && TimedOut ())
+						Debug.Log ("Time out: " + Status + " : " + (Time.time - lastTaskStarTime));
+
 		if (currentTask(actor) || TimedOut()){
 			currentTask = null;
 			taskIndex++;
 			if (taskIndex >= tasks.Count){
 				isCompleted = true;
+				if (actor.debug) Debug.Log("Complete:" + Status);
 			}
 		}
 

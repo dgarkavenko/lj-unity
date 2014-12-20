@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class ForestTree : MonoBehaviour, IInteractiveObject
+public class ForestTree : MonoBehaviour
 {
 	public Transform trunk;
 	public List<SpriteRenderer> tiles;
@@ -16,18 +16,7 @@ public class ForestTree : MonoBehaviour, IInteractiveObject
 	public int[] woundDepth = new int[2];
 
 
-	public void Interact(Interaction interaction, IInteractiveObject subject)
-	{
-		switch (interaction.type)
-		{
-			case Interaction.InteractionType.gunshot:
-			case Interaction.InteractionType.chop:
-			case Interaction.InteractionType.chainsaw:
-				break;
-			default:
-				break;
-		}
-	}
+
 
 
 	public void AddTile(SpriteRenderer tile)

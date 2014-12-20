@@ -1,20 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿public interface IInteraction {
+	
+	Interactive.InteractionType InteractionType {get;}
+	
+}
 
-public class Interaction : ScriptableObject {
+public class ChopAction : IInteraction{
 
-    public enum InteractionType
-    {
-        gunshot,
-        chop,
-        chainsaw,
-        caboom,
-        treehit,
-        bite
-    }
-
-    public InteractionType type;
-    public float value;
-   
-    
+	public Interactive.InteractionType InteractionType {get{return Interactive.InteractionType.chop;}}
+	public int direction;
+	public float power;
 }

@@ -12,11 +12,6 @@ public class ZombieMind
 		}
 	}
 
-	protected Schedule stand;
-	protected Schedule walk;
-	protected Schedule pursuit;
-	protected Schedule meleeAttack;
-	protected Schedule rangedAttack;
 
 	protected Transform ljTransform;
 
@@ -34,49 +29,89 @@ public class ZombieMind
 
 		if (viewDirTowardsLj) {
 			float distance = Mathf.Abs (actor.transform.position.x - ljTransform.position.x);
-			if (distance <= actor.meleeAttackRange){
+			if (distance <= actor.meleeAttackRange && actor.cooldown <= 0){
 				conditions = EnemyConditions.see_enemy;
 				conditions |= EnemyConditions.can_melee_attack;
-			}else if (distance < actor.viewRange || actor.worried || distance < actor.senceRange){
+			}else if (distance < actor.viewRange || distance < actor.senceRange){
 				conditions = EnemyConditions.see_enemy;
 			}
 		}
+
+		if (actor.worried) conditions |= EnemyConditions.see_enemy;
 
 		return conditions;
 	}
 
 	public Schedule StandartStandSchedule{
 		get{
-			stand = new Schedule ("Stand");
-			stand.interruptors = EnemyConditions.see_enemy | EnemyConditions.can_ranged_attack | EnemyConditions.can_melee_attack;
-			stand.tasks.Add (OnInitStand);
-			stand.tasks.Add (OnStand);
-			stand.taskTimeouts = new float[]{5,5};			
-			return stand;
+
+			Schedule shedule = new Schedule ("Stand");
+			shedule.interruptors = EnemyConditions.see_enemy | EnemyConditions.can_ranged_attack | EnemyConditions.can_melee_attack;
+			shedule.tasks.Add (OnInitStand);
+			shedule.tasks.Add (OnStand);
+			shedule.taskTimeouts = new float[]{5,5};			
+			return shedule;
 		}
 	}
 
 	public Schedule StandartWalkSchedule{	
 		get{
-			walk = new Schedule ("Walk");
-			walk.interruptors = EnemyConditions.see_enemy | EnemyConditions.can_ranged_attack | EnemyConditions.can_melee_attack;
-			walk.tasks.Add (OnInitWalk);
-			walk.tasks.Add (OnWalk);	
-			walk.taskTimeouts = new float[]{5,5};
-			return walk;
+			Schedule shedule = new Schedule ("Walk");
+			shedule.interruptors = EnemyConditions.see_enemy | EnemyConditions.can_ranged_attack | EnemyConditions.can_melee_attack;
+			shedule.tasks.Add (OnInitWalk);
+			shedule.tasks.Add (OnWalk);	
+			shedule.taskTimeouts = new float[]{5,5};
+			return shedule;
 		}
 	}
 
 	public Schedule StandartPursuitSchedule{
 		get{
-			pursuit = new Schedule ("Pursuit");
-			pursuit.interruptors = EnemyConditions.can_melee_attack | EnemyConditions.can_melee_attack;
-			pursuit.tasks.Add (OnInitPursuit);
-			pursuit.tasks.Add (OnPursuit);
-			//pursuit.taskTimeouts = new float[]{5,2};	
-			return pursuit;
+			Schedule shedule = new Schedule ("Pursuit");
+			shedule.interruptors = EnemyConditions.can_melee_attack | EnemyConditions.can_melee_attack;
+			shedule.tasks.Add (OnInitPursuit);
+			shedule.tasks.Add (OnPursuit);
+			shedule.taskTimeouts = new float[]{5,3};	
+			return shedule;
 		}
 	}
+
+	public Schedule StandartMeleeAttackSchedule{
+		get{
+			Schedule shedule = new Schedule ("Melee");
+			shedule.tasks.Add (OnInitAttack);
+			shedule.tasks.Add (OnAttack);
+			shedule.tasks.Add (OnEndAttack);
+			return shedule;
+		}
+	}
+
+	bool OnInitAttack (BaseZombie actor)
+	{
+		actor.worried = true;
+		actor.animator.SetTrigger ("melee");
+		return true;
+	}
+
+	bool OnAttack (BaseZombie actor)
+	{
+		if (actor.animator.GetCurrentAnimatorStateInfo(0).IsName("backswing")) {
+			actor.cooldown = 2;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool OnEndAttack(BaseZombie actor)
+	{
+		if (!actor.animator.GetCurrentAnimatorStateInfo(0).IsName("backswing")) {
+			return true;
+		}
+		return false;
+	}
+
+
 
 	protected bool ConditionMatches(EnemyConditions c, BaseZombie actor){
 		return (actor.condition & c) == c;
@@ -104,17 +139,25 @@ public class ZombieMind
 			actor.state = EnemyState.walk;
 			actor.currentSchedule = actor.Walk;
 		}
-		else if (ConditionMatches(EnemyConditions.can_stand, actor) && actor.state == EnemyState.walk)
+		else if (ConditionMatches(EnemyConditions.can_stand, actor) && (actor.state == EnemyState.walk))
 		{
 			actor.state = EnemyState.stand;
 			actor.currentSchedule = actor.Stand;
+		}else{
+			actor.state = EnemyState.stand;
+			actor.currentSchedule = actor.Stand;
 		}
-		
+
+
 		actor.currentSchedule.Reset ();
+
+		if (actor.debug)
+						Debug.Log (actor.currentSchedule.Status + ":::" + actor.condition);	
 	}
 
 	public bool OnInitPursuit(BaseZombie actor){
-		actor.worried = true;
+
+		actor.worried = false;
 		return true;
 	}
 	
@@ -130,8 +173,7 @@ public class ZombieMind
 	
 	public bool OnInitStand(BaseZombie actor){
 
-		//actor.view.stand();
-		actor.rigidbody2D.velocity = new Vector2 (0, 0);
+		actor.rigidbody2D.velocity = new Vector2 (0, 0);	
 		actor.currentSchedule.taskTimeouts[1] = UnityEngine.Random.Range (1f, 2f);
 		return true;
 	}
@@ -141,7 +183,7 @@ public class ZombieMind
 	}
 	
 	public bool OnInitWalk(BaseZombie actor){
-		actor.currentSchedule.taskTimeouts[1] = UnityEngine.Random.Range (1f, 2f);
+		actor.currentSchedule.taskTimeouts[1] = UnityEngine.Random.Range (3f, 4f);
 		actor.ViewDirection = UnityEngine.Random.Range (0, 100) > 50 ? -1 : 1;
 		return true;
 	}

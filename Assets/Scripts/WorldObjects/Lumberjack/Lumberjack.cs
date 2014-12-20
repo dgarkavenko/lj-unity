@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Lumberjack : MonoBehaviour, IInteractiveObject
+public class Lumberjack : MonoBehaviour
 {
 
 
@@ -99,22 +99,5 @@ public class Lumberjack : MonoBehaviour, IInteractiveObject
         }
     }
 
-    public void Interact(Interaction interaction, IInteractiveObject subject)
-    {
-        switch (interaction.type)
-        {
-            case Interaction.InteractionType.gunshot:
-            case Interaction.InteractionType.chop:
-            case Interaction.InteractionType.chainsaw:
-                break;
-            case Interaction.InteractionType.caboom:
-                break;
-            case Interaction.InteractionType.treehit:
-                break;
-            case Interaction.InteractionType.bite:
-                break;
-            default:
-                break;
-        }
-    }
+  
 }

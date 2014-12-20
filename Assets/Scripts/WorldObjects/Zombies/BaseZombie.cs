@@ -1,8 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseZombie : MonoBehaviour, IInteractiveObject {
+public class BaseZombie : MonoBehaviour {
 
+
+	public bool hit;
+
+	public float cooldown = 0;
+
+	public void OnHitFrame(){
+		hit = true;
+	}
 
 	public EnemyConditions condition;
 	public EnemyState state;
@@ -15,15 +23,21 @@ public class BaseZombie : MonoBehaviour, IInteractiveObject {
 	protected Schedule rangedAttack;
 
 	public int meleeAttackRange = 1;
-	public int rangedAttackRange = 2;
+	public float meleeAttackCooldown = 2;
+	public int rangedAttackRange = 4;
+	public float rangedAttackCooldown = 2;
+
 	public int senceRange = 1;
 	public int viewRange = 10;
 
 	public bool debug;
+	private EnemyConditions prevCondition;
 
 	protected int viewDirection = 1;
 
 	public bool worried = false;
+
+	public Animator animator;
 
 
 	public int ViewDirection
@@ -60,7 +74,7 @@ public class BaseZombie : MonoBehaviour, IInteractiveObject {
 
 	public Schedule MeleeAttack {
 		get {
-			return pursuit;
+			return meleeAttack;
 		}
 	}
 
@@ -70,15 +84,17 @@ public class BaseZombie : MonoBehaviour, IInteractiveObject {
 		}
 	}
 
-	void Awake(){		
+	void Awake(){
+
 		stand = ZombieMind.Instance.StandartStandSchedule;		
 		walk = ZombieMind.Instance.StandartWalkSchedule;	
 		pursuit = ZombieMind.Instance.StandartPursuitSchedule;
+		meleeAttack = ZombieMind.Instance.StandartMeleeAttackSchedule;
 
 		currentSchedule = stand;
 		state = EnemyState.stand;
 
-	
+		animator = GetComponent<Animator> ();
 
 		conditionsUpdateTime = conditionsRefreshRate / 60f;
 	}
@@ -91,6 +107,7 @@ public class BaseZombie : MonoBehaviour, IInteractiveObject {
 	void Update(){
 
 		conditionsUpdate += Time.deltaTime;
+		cooldown -= Time.deltaTime;
 		
 		if (conditionsUpdate >= conditionsUpdateTime) {
 			conditionsUpdate -= conditionsUpdateTime;
@@ -99,30 +116,34 @@ public class BaseZombie : MonoBehaviour, IInteractiveObject {
 
 		if (currentSchedule == null)
 			ZombieMind.Instance.SelectNewSchedule(this);
-		
+
+
+		if (debug && currentSchedule.IsInterrupted (condition))
+						Debug.Log ("Interrupted");
+
 		if (currentSchedule.IsCompleted || currentSchedule.IsInterrupted(condition))
 			ZombieMind.Instance.SelectNewSchedule(this);
 
+		
+
 		currentSchedule.ManualUpdate(this);
-
-		if (debug) {
-			Debug.Log("Schedule: " + currentSchedule.Status);
-		}
+		animator.SetInteger ("ms", (int)rigidbody2D.velocity.x);
 
 	}
 
 
-	public virtual void Interact(Interaction interaction, IInteractiveObject subject){
-
-	}
 
 	protected virtual void UpdateConditions(){
+
+		if (debug)
+			prevCondition = condition;
+
 		condition = EnemyConditions.can_stand;
 		condition |= EnemyConditions.can_walk;
 		condition |= ZombieMind.Instance.GetPositionConditions (this);
 
-		if (debug) {
-			Debug.Log(name + " conditions: " + condition);
+		if (debug && prevCondition != condition) {
+			Debug.Log(condition);
 		}
 	}
 
