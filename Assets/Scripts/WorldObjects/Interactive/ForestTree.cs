@@ -112,17 +112,10 @@ public class ForestTree : MonoBehaviour
 
 		stomp.transform.position = transform.position;
 
-		var rootsSprite = Resources.Load<Sprite>("Visual/Environment/Trees/roots_w" + trunkPixelWidth);
-		
-		if (rootsSprite != null) {
-			var roots = ((SpriteRenderer)GameObject.Instantiate(baseStomp));
-			
-			roots.name = "Roots";
-			roots.sprite = rootsSprite;
-			roots.sortingLayerName = tile.sortingLayerName;
-			roots.sortingOrder = 1;
+		if (roots != null) {
+			Vector3 rootsLocalPosition = roots.transform.localPosition;
 			roots.transform.parent = stomp.transform;
-			roots.transform.localPosition = new Vector3(((int)-rootsSprite.rect.width / 2) / 10f, 0, 0);
+			roots.transform.localPosition = rootsLocalPosition;
 			roots.transform.localScale = Vector3.one;
 		}
 
@@ -179,10 +172,6 @@ public class ForestTree : MonoBehaviour
 			new Vector2(unitWidth * 0.5f, unitBreakHeight - woundUnitHeight / 2),
 			new Vector2(unitWidth * 0.5f, 0)
 		});
-
-		if (this.roots != null) {
-			DestroyImmediate(this.roots.gameObject);
-		}
 
 		float colliderHeight = GetComponent<BoxCollider2D>().size.y;
 
