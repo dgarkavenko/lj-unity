@@ -22,6 +22,7 @@ public class TreeGenerator : MonoBehaviour
 
 		var tree = (ForestTree)GameObject.Instantiate(treeSource, position, Quaternion.identity);
 		tree.name = "Tree " + width;
+		tree.trunkPixelWidth = width;
 
 		var trunkTile = Resources.Load<Sprite>("Visual/Environment/Trees/tree_tile_w" + width);
 
@@ -64,7 +65,7 @@ public class TreeGenerator : MonoBehaviour
 			treetop.sortingLayerName = sortingLayer;
 			treetop.sortingOrder = 1;
 			treetop.transform.parent = tree.transform;
-			treetop.transform.localPosition = new Vector3((-treetopSprite.rect.width / 2) / 10f, resultHeight / 10f, 0);
+			treetop.transform.localPosition = new Vector3(((int)-treetopSprite.rect.width / 2) / 10f, resultHeight / 10f, 0);
 			treetop.transform.localScale = Vector3.one;
 		}
 
@@ -78,8 +79,10 @@ public class TreeGenerator : MonoBehaviour
 			roots.sortingLayerName = sortingLayer;
 			roots.sortingOrder = 1;
 			roots.transform.parent = tree.transform;
-			roots.transform.localPosition = new Vector3((-rootsSprite.rect.width / 2) / 10f, 0, 0);
+			roots.transform.localPosition = new Vector3(((int)-rootsSprite.rect.width / 2) / 10f, 0, 0);
 			roots.transform.localScale = Vector3.one;
+
+			tree.roots = roots.transform;
 		}
 
 		var collider = (BoxCollider2D)tree.collider2D;
