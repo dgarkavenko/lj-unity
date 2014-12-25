@@ -117,16 +117,15 @@ public class Gun : Weapon
 		hit = Physics2D.Raycast(pivotPosition, dir, rayCastDistance, LayerMask.GetMask("Zombies"));
         if (hit.collider != null)
         {
-            trace.Show(origin + dir, hit.point);
-            hit.collider.rigidbody2D.AddForce(dir * 220);
+			var IR = hit.collider.gameObject.GetComponent<Interactive>();
+			if (IR != null){
+				IR.Interact(new GunShotAction{
+					power = UnityEngine.Random.Range(gd.damage_min, gd.damage_max),
+					point = hit.point, direction = intDir,
+					force = gd.force});
+			}
 
-			GameObject vfx = GameObject.Instantiate(Resources.Load("Visual/VFX/Blood") as GameObject) as GameObject;
-
-			vfx.transform.position = hit.point;
-			vfx.particleSystem.Play();
-			vfx.particleSystem.renderer.sortingLayerName = "Dynamic";
-
-
+			trace.Show(origin + dir, hit.point);
 
         }
         else

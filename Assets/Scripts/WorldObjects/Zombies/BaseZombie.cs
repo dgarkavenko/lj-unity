@@ -94,12 +94,49 @@ public class BaseZombie : MonoBehaviour {
 		currentSchedule = stand;
 		state = EnemyState.stand;
 
-		animator = GetComponent<Animator> ();
-
+		if (animator == null) animator = GetComponentInChildren<Animator> ();
+		IR.InteractionEvent += OnInteractionEvent;
 		conditionsUpdateTime = conditionsRefreshRate / 60f;
 	}
 
-	
+	//TODO DG Temporary
+	void TEMP_ShowVFX(int dir, Vector2 point){
+
+		GameObject vfx = GameObject.Instantiate(Resources.Load("Visual/VFX/Blood") as GameObject) as GameObject;
+		vfx.transform.position = point;
+		vfx.particleSystem.Play();
+		vfx.particleSystem.renderer.sortingLayerName = "Dynamic";
+
+	}
+
+	void OnInteractionEvent (IInteraction action)
+	{
+		switch (action.InteractionType) {
+
+			case Interactive.InteractionType.gunshot:
+
+				worried = true;	
+				var gunshot = action as GunShotAction;						
+				rigidbody2D.AddForce(new Vector2(gunshot.direction * gunshot.force, 0));				
+				TEMP_ShowVFX(-1, gunshot.point);
+
+			break;
+
+
+			case Interactive.InteractionType.chop:
+				worried = true;
+				var chop = action as ChopAction;
+				rigidbody2D.AddForce(new Vector2(chop.direction * 5 * chop.power, 0));
+				TEMP_ShowVFX(-1, chop.point);
+				
+
+			break;
+				default:
+						break;
+		}
+	}
+
+	public Interactive IR;
 	public int conditionsRefreshRate = 10;
 	protected float conditionsUpdateTime;
 	protected float conditionsUpdate = 0;
@@ -121,13 +158,16 @@ public class BaseZombie : MonoBehaviour {
 		if (debug && currentSchedule.IsInterrupted (condition))
 						Debug.Log ("Interrupted");
 
-		if (currentSchedule.IsCompleted || currentSchedule.IsInterrupted(condition))
+		if (currentSchedule.IsCompleted || currentSchedule.IsInterrupted (condition)) {
 			ZombieMind.Instance.SelectNewSchedule(this);
 
-		
+		}
+
+		animator.SetBool ("walk", currentSchedule.name == "Walk" || currentSchedule.name == "Pursuit");
+		animator.SetInteger ("ms", (int)rigidbody2D.velocity.x);		
 
 		currentSchedule.ManualUpdate(this);
-		animator.SetInteger ("ms", (int)rigidbody2D.velocity.x);
+
 
 	}
 

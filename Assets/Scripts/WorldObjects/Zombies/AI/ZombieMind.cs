@@ -128,6 +128,7 @@ public class ZombieMind
 		{
 			actor.state = EnemyState.ranged;
 			actor.currentSchedule = actor.RangedAttack;
+
 		}
 		else if (ConditionMatches (EnemyConditions.see_enemy, actor))
 		{
@@ -163,10 +164,10 @@ public class ZombieMind
 	
 	public bool OnPursuit(BaseZombie actor){
 
-
 		actor.ViewDirection = ljTransform.position.x < actor.transform.position.x ? -1 : 1;
 		if (Math.Abs(ljTransform.position.x - actor.transform.position.x) > actor.meleeAttackRange) {
-			actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
+			//actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
+			actor.rigidbody2D.AddRelativeForce(new Vector2(actor.ViewDirection * 30, 0));
 		}
 		return false;
 	}
@@ -189,7 +190,9 @@ public class ZombieMind
 	}
 	
 	public bool OnWalk(BaseZombie actor){
-		actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
+
+		//actor.rigidbody2D.velocity = new Vector2 (actor.ViewDirection * 5, 0);
+		actor.rigidbody2D.AddRelativeForce(new Vector2(actor.ViewDirection * 30, 0));
 		return false;
 	}
 

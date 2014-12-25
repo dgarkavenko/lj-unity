@@ -1,0 +1,355 @@
+fileFormatVersion: 2
+guid: 78764f9be3e87124d8ada034340c06ab
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Steve_75_58_0
+    21300002: Steve_75_58_1
+    21300004: Steve_75_58_2
+    21300006: Steve_75_58_3
+    21300008: Steve_75_58_4
+    21300010: Steve_75_58_5
+    21300012: Steve_75_58_6
+    21300014: Steve_75_58_7
+    21300016: Steve_75_58_8
+    21300018: Steve_75_58_9
+    21300020: Steve_75_58_10
+    21300022: Steve_75_58_11
+    21300024: Steve_75_58_12
+    21300026: Steve_75_58_13
+    21300028: Steve_75_58_14
+    21300030: Steve_75_58_15
+    21300032: Steve_75_58_16
+    21300034: Steve_75_58_17
+    21300036: Steve_75_58_18
+    21300038: Steve_75_58_19
+    21300040: Steve_75_58_20
+    21300042: Steve_75_58_21
+    21300044: Steve_75_58_22
+    21300046: Steve_75_58_23
+    21300048: Steve_75_58_24
+    21300050: Steve_75_58_25
+    21300052: Steve_75_58_26
+    21300054: Steve_75_58_27
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 512
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 10
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Steve_75_58_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_2
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_3
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_4
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_5
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_6
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 203
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_8
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_9
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_10
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_11
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_12
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_13
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 150
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_15
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_16
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_17
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_18
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_19
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_20
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 97
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_22
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_23
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_24
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_25
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_26
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Steve_75_58_27
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 44
+        width: 70
+        height: 53
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

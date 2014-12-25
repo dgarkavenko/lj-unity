@@ -11,12 +11,16 @@ public class Axe : Weapon {
 	public Axe (GameObject parent) : base(parent)
 	{
 		relatedTypes = DeadlyThings.AXES;
-		rayCastDistance = 10;
+		rayCastDistance = 4;
 	}
 
 	RaycastHit2D hit;
 
 	public override void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPosition){
+
+
+		int intDir = Input.mousePosition.x > pivotScreenPosition.x ? 1 : -1;
+
 
 		if (Input.GetMouseButton (0)) {
 			power += td.gain;
@@ -26,13 +30,15 @@ public class Axe : Weapon {
 				animator.SetTrigger("chop");
 
 				//TODO RaycastAll
-				hit = Physics2D.Raycast(pivotPosition, Vector2.right, rayCastDistance, LayerMask.GetMask("Zombies", "Trees"));						
+				hit = Physics2D.Raycast(pivotPosition - Vector2.up, new Vector2(intDir, 0), rayCastDistance, LayerMask.GetMask("Zombies", "Trees"));						
+
 
 				if (hit.collider != null){
 					var interactor = hit.collider.gameObject.GetComponent<Interactive>();
 
+
 					if (interactor != null)
-						interactor.Interact(new ChopAction{power = (float)power, direction = hit.collider.gameObject.transform.position.x > pivotPosition.x ? 1 : -1});
+						interactor.Interact(new ChopAction{power = (float)power, direction = intDir, point = hit.point});
 				}
 
 			}
