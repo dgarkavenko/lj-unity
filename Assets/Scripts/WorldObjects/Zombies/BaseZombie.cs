@@ -104,8 +104,8 @@ public class BaseZombie : MonoBehaviour {
 
 		GameObject vfx = GameObject.Instantiate(Resources.Load("Visual/VFX/Blood") as GameObject) as GameObject;
 		vfx.transform.position = point;
-		vfx.particleSystem.Play();
-		vfx.particleSystem.renderer.sortingLayerName = "Dynamic";
+		vfx.GetComponent<ParticleSystem>().Play();
+		vfx.GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingLayerName = "Dynamic";
 
 	}
 
@@ -117,7 +117,7 @@ public class BaseZombie : MonoBehaviour {
 
 				worried = true;	
 				var gunshot = action as GunShotAction;						
-				rigidbody2D.AddForce(new Vector2(gunshot.direction * gunshot.force, 0));				
+				GetComponent<Rigidbody2D>().AddForce(new Vector2(gunshot.direction * gunshot.force, 0));				
 				TEMP_ShowVFX(-1, gunshot.point);
 
 			break;
@@ -126,7 +126,7 @@ public class BaseZombie : MonoBehaviour {
 			case Interactive.InteractionType.chop:
 				worried = true;
 				var chop = action as ChopAction;
-				rigidbody2D.AddForce(new Vector2(chop.direction * 5 * chop.power, 0));
+				GetComponent<Rigidbody2D>().AddForce(new Vector2(chop.direction * 5 * chop.power, 0));
 				TEMP_ShowVFX(-1, chop.point);
 				
 
@@ -164,7 +164,7 @@ public class BaseZombie : MonoBehaviour {
 		}
 
 		animator.SetBool ("walk", currentSchedule.name == "Walk" || currentSchedule.name == "Pursuit");
-		animator.SetInteger ("ms", (int)rigidbody2D.velocity.x);		
+		animator.SetInteger ("ms", (int)GetComponent<Rigidbody2D>().velocity.x);		
 
 		currentSchedule.ManualUpdate(this);
 

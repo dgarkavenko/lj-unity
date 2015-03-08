@@ -3,18 +3,23 @@
 
 public class Utils
 {
-	public static Sprite CloneSprite(Sprite sourceSprite)
+
+	public static Sprite CloneSpriteUltra(Sprite sourceSprite)
 	{
-		var extents = sourceSprite.bounds.extents;
-		var center = sourceSprite.bounds.center;
-		
-		var pivotPoint = new Vector2(0.5f - center.x / (2f * extents.x),
-		                             0.5f - center.y / (2f * extents.y));
-		
-		float pixelsToUnits = sourceSprite.rect.width / sourceSprite.bounds.size.x;
-		
-		var texture = Object.Instantiate(sourceSprite.texture) as Texture2D;
-		
-		return Sprite.Create(texture, sourceSprite.rect, pivotPoint, pixelsToUnits);
+		int x = (int)sourceSprite.textureRect.x;
+		int y = (int)sourceSprite.textureRect.y;
+		int h = (int)sourceSprite.textureRect.height;
+		int w = (int)sourceSprite.textureRect.width;
+	
+		var texture = new Texture2D(w, h, TextureFormat.RGBA32, false, false);
+		texture.filterMode = FilterMode.Point;	
+
+		texture.SetPixels (0,0,w,h,sourceSprite.texture.GetPixels (x, y, w, h));
+		texture.Apply (false, false);
+
+		var pivotX = - sourceSprite.bounds.center.x / sourceSprite.bounds.extents.x / 2 + 0.5f;
+		var pivotY = - sourceSprite.bounds.center.y / sourceSprite.bounds.extents.y / 2 + 0.5f;
+
+		return Sprite.Create (texture, new Rect(0,0,w,h), new Vector2(pivotX, pivotY), sourceSprite.pixelsPerUnit);
 	}
 }

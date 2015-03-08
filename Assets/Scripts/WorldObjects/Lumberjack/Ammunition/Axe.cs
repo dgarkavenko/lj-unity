@@ -26,7 +26,7 @@ public class Axe : Weapon {
 			power += td.gain;
 			if (power > 100) power = 100;
 		}else if(Input.GetMouseButtonUp(0)){
-			if (power > 20){
+			if (power > 5){
 				animator.SetTrigger("chop");
 
 				//TODO RaycastAll

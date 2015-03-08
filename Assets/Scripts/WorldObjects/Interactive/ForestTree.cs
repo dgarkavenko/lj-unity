@@ -46,7 +46,7 @@ public class ForestTree : MonoBehaviour
 		var tile = tiles[0];
 
 		if (!wounded) {
-			tile.sprite = Utils.CloneSprite(tile.sprite);
+			tile.sprite = Utils.CloneSpriteUltra(tile.sprite);
 			wounded = true;
 		}
 
@@ -120,7 +120,7 @@ public class ForestTree : MonoBehaviour
 		}
 
 		{
-			var trunkSprite = Utils.CloneSprite(tile.sprite);
+			var trunkSprite = Utils.CloneSpriteUltra(tile.sprite);
 
 			// erasing part of the trunk above the break point
 			var texture = trunkSprite.texture;
@@ -175,7 +175,7 @@ public class ForestTree : MonoBehaviour
 
 		float colliderHeight = GetComponent<BoxCollider2D>().size.y;
 
-		DestroyImmediate(collider2D);
+		DestroyImmediate(GetComponent<Collider2D>());
 		var treeCollider = gameObject.AddComponent<PolygonCollider2D>();
 
 		treeCollider.SetPath(0, new Vector2[] {
@@ -188,6 +188,6 @@ public class ForestTree : MonoBehaviour
 
 		gameObject.AddComponent<Rigidbody2D>();
 
-		rigidbody2D.gravityScale = 0.3f;
+		GetComponent<Rigidbody2D>().gravityScale = 0.3f;
 	}
 }

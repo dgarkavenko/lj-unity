@@ -85,9 +85,9 @@ public class TreeGenerator : MonoBehaviour
 			tree.roots = roots.transform;
 		}
 
-		var collider = (BoxCollider2D)tree.collider2D;
+		var collider = (BoxCollider2D)tree.GetComponent<Collider2D>();
 		collider.size = new Vector2(width / 10f, resultHeight / 10f);
-		collider.center = new Vector2(0, resultHeight / 20f);
+		collider.offset = new Vector2(0, resultHeight / 20f);
 
 //		collider.bounds
 	}

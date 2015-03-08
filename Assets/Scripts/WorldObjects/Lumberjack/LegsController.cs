@@ -70,7 +70,7 @@ public class LegsController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.W) && grounded)
         {
-            rigidbody2D.AddForce(new Vector2(0, jump_power));
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jump_power));
             grounded = false;
         }
 
@@ -82,7 +82,7 @@ public class LegsController : MonoBehaviour {
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(grounder.position, groundedDistance, groundMask);
-        rigidbody2D.velocity = new Vector2(velocity_x, rigidbody2D.velocity.y);
+        GetComponent<Rigidbody2D>().velocity = new Vector2(velocity_x, GetComponent<Rigidbody2D>().velocity.y);
 
     }
 }
