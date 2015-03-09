@@ -5,15 +5,25 @@ public class Lumberjack : MonoBehaviour
 {
 
 
+	public LayerMask groundMask;
+	public bool Grounded = false;
+	public bool Moving = false;
+	public Transform grounder;
+	
+    public Transform Body;
+    public Transform Pivot;
+	public GameObject Hands;
 
-    public LegsController legs;
-
-    public Transform body;
-    public Transform pivot;
-	public GameObject hands;
+	public Animator Animator;
 	   
-	private Weapon currentEquipContainer;
-	private Weapon[] allEquipContainers;
+	private Weapon _currentEquipContainer;
+	private Weapon[] _allEquipContainers;
+
+	private Rigidbody2D _rigidbody2D;
+
+
+	public int JumpPower = 650;
+	public int MovementSpeed = 14;
 
 	// --- TEMP ---
 
@@ -23,44 +33,50 @@ public class Lumberjack : MonoBehaviour
 
 
 	void Start () {
-        legs.directionChangedEvent += OnMovementDirectionChanged;
 
-		allEquipContainers = new Weapon[]{new Gun (hands), new Axe (hands)};
-		currentEquipContainer = allEquipContainers [0];
+		_allEquipContainers = new Weapon[]{new Gun (Hands), new Axe (Hands)};
+		_currentEquipContainer = _allEquipContainers [0];
 
 		GunData gd = GameplayData.Instance.guns[0];		
-		currentEquipContainer.SetWeapon(gd);
+		_currentEquipContainer.SetWeapon(gd);
+
+		_rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+		Animator = gameObject.GetComponent<Animator>();
+
+		foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
+		
+		
 	}
 
 	private void SelectWeapon(WeaponData wd){
 
 		Debug.Log ("Switching to: " + wd.alias);
 
-		foreach (var container in allEquipContainers) {
+		foreach (var container in _allEquipContainers) {
 			if((container.relatedTypes & wd.type) == wd.type){
 
-				if (currentEquipContainer != container)
+				if (_currentEquipContainer != container)
 				{
-					currentEquipContainer.Kill();
-					currentEquipContainer = container;
-					currentEquipContainer.Init();
+					_currentEquipContainer.Kill();
+					_currentEquipContainer = container;
+					_currentEquipContainer.Init();
 				}
 
 				break;
 			}
 		}
 
-		currentEquipContainer.SetWeapon(wd);		
+		_currentEquipContainer.SetWeapon(wd);		
 	}
 
     private void OnMovementDirectionChanged(int dir)
     {
-        body.localScale = new Vector3(ViewDirection * legs.ViewDirection, 1, 1);
+        Body.localScale = new Vector3(ViewDirection * legsOrientation, 1, 1);
     }
 
     void Update()
     {
-        var pivotScreenPosition = Camera.main.WorldToScreenPoint(pivot.position);
+        var pivotScreenPosition = Camera.main.WorldToScreenPoint(Pivot.position);
         ViewDirection = pivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
 
 		int alpha1 = (int)KeyCode.Alpha1;
@@ -81,9 +97,17 @@ public class Lumberjack : MonoBehaviour
 			}
 		}
 
-		if (currentEquipContainer != null)
-			currentEquipContainer.ManualUpdate (pivotScreenPosition, pivot.position);
+		if (_currentEquipContainer != null)
+			_currentEquipContainer.ManualUpdate (pivotScreenPosition, Pivot.position);
     }
+
+
+	void FixedUpdate()
+	{
+		Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
+		Animator.SetBool("grounded", Grounded);
+		Animator.SetBool("moving", Moving);
+	}
 
     private int viewDirection;
     public int ViewDirection
@@ -94,10 +118,44 @@ public class Lumberjack : MonoBehaviour
             if (viewDirection != value)
             {
                 viewDirection = value;
-                body.localScale = new Vector3(value * legs.ViewDirection, 1, 1);
+				Body.localScale = new Vector3(value * LegsOrientation, 1, 1);
             }            
         }
     }
 
-  
+	private int legsOrientation = 1;
+	public int LegsOrientation
+	{
+		get { return legsOrientation; }
+		set
+        {
+
+			if (legsOrientation != value)
+            {
+				legsOrientation = value;
+	            OnMovementDirectionChanged(value);
+                transform.localScale = new Vector3(value, 1, 1);
+            }
+        }
+	}
+
+
+	public void Jump()
+	{
+		_rigidbody2D.AddForce(new Vector2(0, JumpPower));
+	}
+
+	public void Move(int d, bool real)
+	{
+		if (d != 0)
+			LegsOrientation = d;
+
+		_rigidbody2D.velocity = new Vector2(MovementSpeed * d, _rigidbody2D.velocity.y);
+		
+	}
+
+	public void Stop()
+	{
+		//_rigidbody2D.velocity = new Vector2(0, _rigidbody2D.velocity.y);
+	}
 }

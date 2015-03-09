@@ -38,7 +38,6 @@ public class LegsController : MonoBehaviour {
 
     private float velocity_x;
 
-    public float groundedDistance = 0.1f;
     public LayerMask groundMask;
     public bool grounded = false;
     public Transform grounder;
@@ -68,20 +67,13 @@ public class LegsController : MonoBehaviour {
             ViewDirection = 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && grounded)
-        {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jump_power));
-            grounded = false;
-        }
-
+       
         animator.SetBool("grounded", grounded);
-        animator.SetInteger("direction", velocity_x > 0 ? 1 : (velocity_x < 0 ? -1 : 0));
 
     }
 
     void FixedUpdate()
     {
-        grounded = Physics2D.OverlapCircle(grounder.position, groundedDistance, groundMask);
         GetComponent<Rigidbody2D>().velocity = new Vector2(velocity_x, GetComponent<Rigidbody2D>().velocity.y);
 
     }
