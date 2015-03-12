@@ -44,8 +44,10 @@ public class Lumberjack : MonoBehaviour
 		Animator = gameObject.GetComponent<Animator>();
 
 		foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
-		
-		
+
+
+		ZStateBase.LjTransform = this.transform;
+
 	}
 
 	private void SelectWeapon(WeaponData wd){

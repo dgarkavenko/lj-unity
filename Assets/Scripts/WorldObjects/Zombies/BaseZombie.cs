@@ -54,49 +54,13 @@ public class BaseZombie : MonoBehaviour {
 		}
 	}
 
-	public Schedule Stand {
-		get {
-			return stand;
-		}
-	}
-
-	public Schedule Walk {
-		get {
-			return walk;
-		}
-	}
-
-	public Schedule Pursuit {
-		get {
-			return pursuit;
-		}
-	}
-
-	public Schedule MeleeAttack {
-		get {
-			return meleeAttack;
-		}
-	}
-
-	public Schedule RangedAttack {
-		get {
-			return rangedAttack;
-		}
-	}
-
 	void Awake(){
-
-		stand = ZombieMind.Instance.StandartStandSchedule;		
-		walk = ZombieMind.Instance.StandartWalkSchedule;	
-		pursuit = ZombieMind.Instance.StandartPursuitSchedule;
-		meleeAttack = ZombieMind.Instance.StandartMeleeAttackSchedule;
-
-		currentSchedule = stand;
-		state = EnemyState.stand;
-
+	
 		if (animator == null) animator = GetComponentInChildren<Animator> ();
 		IR.InteractionEvent += OnInteractionEvent;
 		conditionsUpdateTime = conditionsRefreshRate / 60f;
+		foreach (var zstate in animator.GetBehaviours<ZStateBase>()) zstate.Zombie = this;
+
 	}
 
 	//TODO DG Temporary
@@ -142,49 +106,18 @@ public class BaseZombie : MonoBehaviour {
 	protected float conditionsUpdate = 0;
 
 	void Update(){
-
+		
 		conditionsUpdate += Time.deltaTime;
 		cooldown -= Time.deltaTime;
 		
 		if (conditionsUpdate >= conditionsUpdateTime) {
 			conditionsUpdate -= conditionsUpdateTime;
-			UpdateConditions();
+			ZombieMind.Instance.GetPositionConditions(this);
+			animator.SetBool("on_cooldown", cooldown > 0);
 		}
-
-		if (currentSchedule == null)
-			ZombieMind.Instance.SelectNewSchedule(this);
-
-
-		if (debug && currentSchedule.IsInterrupted (condition))
-						Debug.Log ("Interrupted");
-
-		if (currentSchedule.IsCompleted || currentSchedule.IsInterrupted (condition)) {
-			ZombieMind.Instance.SelectNewSchedule(this);
-
-		}
-
-		animator.SetBool ("walk", currentSchedule.name == "Walk" || currentSchedule.name == "Pursuit");
-		animator.SetInteger ("ms", (int)GetComponent<Rigidbody2D>().velocity.x);		
-
-		currentSchedule.ManualUpdate(this);
-
 
 	}
 
 
-
-	protected virtual void UpdateConditions(){
-
-		if (debug)
-			prevCondition = condition;
-
-		condition = EnemyConditions.can_stand;
-		condition |= EnemyConditions.can_walk;
-		condition |= ZombieMind.Instance.GetPositionConditions (this);
-
-		if (debug && prevCondition != condition) {
-			Debug.Log(condition);
-		}
-	}
 
 }

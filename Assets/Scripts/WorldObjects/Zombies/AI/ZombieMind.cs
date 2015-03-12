@@ -21,25 +21,24 @@ public class ZombieMind
 		ljTransform = GameObject.Find ("Lumberjack").GetComponent<Transform>();
 	}
 
-	public EnemyConditions GetPositionConditions(BaseZombie actor){
+	public void GetPositionConditions(BaseZombie actor){
 
-		EnemyConditions conditions = EnemyConditions.can_stand;
 
 		bool viewDirTowardsLj = ( actor.ViewDirection == 1 && actor.transform.position.x < ljTransform.position.x) || (actor.ViewDirection == -1 && actor.transform.position.x > ljTransform.position.x);
 
-		if (viewDirTowardsLj) {
-			float distance = Mathf.Abs (actor.transform.position.x - ljTransform.position.x);
-			if (distance <= actor.meleeAttackRange && actor.cooldown <= 0){
-				conditions = EnemyConditions.see_enemy;
-				conditions |= EnemyConditions.can_melee_attack;
-			}else if (distance < actor.viewRange || distance < actor.senceRange){
-				conditions = EnemyConditions.see_enemy;
-			}
+		if (viewDirTowardsLj)
+		{
+			float distance = Mathf.Abs(actor.transform.position.x - ljTransform.position.x);
+
+			actor.animator.SetBool("see_enemy", distance < actor.viewRange || distance < actor.senceRange);
+			actor.animator.SetBool("can_melee", distance <= actor.meleeAttackRange);
+		}
+		else
+		{
+			actor.animator.SetBool("see_enemy", actor.worried);
+			actor.animator.SetBool("can_melee", false);
 		}
 
-		if (actor.worried) conditions |= EnemyConditions.see_enemy;
-
-		return conditions;
 	}
 
 	public Schedule StandartStandSchedule{
@@ -117,44 +116,7 @@ public class ZombieMind
 		return (actor.condition & c) == c;
 	}
 	
-	public void SelectNewSchedule (BaseZombie actor)
-	{	
-		if (ConditionMatches (EnemyConditions.can_melee_attack, actor))		
-		{
-			actor.state = EnemyState.melee;
-			actor.currentSchedule = actor.MeleeAttack;
-		}
-		else if (ConditionMatches(EnemyConditions.can_ranged_attack, actor))
-		{
-			actor.state = EnemyState.ranged;
-			actor.currentSchedule = actor.RangedAttack;
-
-		}
-		else if (ConditionMatches (EnemyConditions.see_enemy, actor))
-		{
-			actor.state = EnemyState.pursuit;
-			actor.currentSchedule = actor.Pursuit;
-		}
-		else if (ConditionMatches(EnemyConditions.can_walk, actor) && actor.state == EnemyState.stand)
-		{
-			actor.state = EnemyState.walk;
-			actor.currentSchedule = actor.Walk;
-		}
-		else if (ConditionMatches(EnemyConditions.can_stand, actor) && (actor.state == EnemyState.walk))
-		{
-			actor.state = EnemyState.stand;
-			actor.currentSchedule = actor.Stand;
-		}else{
-			actor.state = EnemyState.stand;
-			actor.currentSchedule = actor.Stand;
-		}
-
-
-		actor.currentSchedule.Reset ();
-
-		if (actor.debug)
-						Debug.Log (actor.currentSchedule.Status + ":::" + actor.condition);	
-	}
+	
 
 	public bool OnInitPursuit(BaseZombie actor){
 
