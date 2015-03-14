@@ -106,7 +106,7 @@ public class Lumberjack : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
+        Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
 		Animator.SetBool("grounded", Grounded);
 		Animator.SetBool("moving", Moving);
 	}

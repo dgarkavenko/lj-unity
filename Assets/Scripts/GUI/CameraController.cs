@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour {
     Camera cam;
     public float scale = 1f;
     public bool update = false;
-	public Lumberjack lumberjack;
+	public GameObject lumberjack;
 
 
     string s;
