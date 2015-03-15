@@ -25,11 +25,6 @@ public class LJStateBase : StateMachineBehaviour
 			lj.Moving = false;
 			lj.Stop();
 		}
-	}
-
-	virtual public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		
-	}
+	}	
 
 }

@@ -10,9 +10,7 @@ public class MStateWalk : MStateBase {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
-            Dude.HorizontalMove(Input.GetAxis("Horizontal") > 0 ? 1 : -1, Dude.NormalMoveSpeed);
-               
+            Dude.HorizontalMove(Input.GetAxis("Horizontal") > 0 ? 1 : -1, Dude.NormalMoveSpeed);               
 	}
 
   

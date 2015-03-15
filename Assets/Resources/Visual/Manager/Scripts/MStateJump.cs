@@ -13,8 +13,14 @@ public class MStateJump : MStateBase {
     {
         var horInput = Input.GetAxis("Horizontal");
 
-        if (horInput != 0)        
+        if (horInput != 0)
             Dude.HorizontalMove(horInput > 0 ? 1 : -1, Dude.NormalMoveSpeed);
+        else Dude.Drag(Dude.JumpDrag);
+
+
+        if (Input.GetKey(KeyCode.Joystick1Button0) && Dude._rigidbody2D.velocity.y > 0)        
+            Dude.Lift();
+        
         
 
     }
