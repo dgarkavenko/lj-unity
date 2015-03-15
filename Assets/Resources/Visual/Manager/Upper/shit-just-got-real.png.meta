@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 0ab6937d3ac5d904da9b7320ba96fa8f
-timeCreated: 1426450754
+timeCreated: 1426457815
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -17,6 +17,7 @@ TextureImporter:
     21300020: shit-just-got-real_10
     21300022: shit-just-got-real_11
     21300024: shit-just-got-real_12
+    21300026: shit-just-got-real_13
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -186,6 +187,16 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: shit-just-got-real_13
+      rect:
+        serializedVersion: 2
+        x: 32
         y: 0
         width: 32
         height: 32
