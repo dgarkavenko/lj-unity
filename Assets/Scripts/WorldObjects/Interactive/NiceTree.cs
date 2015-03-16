@@ -30,7 +30,7 @@ public class NiceTree : MonoBehaviour{
 	void Start(){
 		GetComponent<Interactive>().InteractionEvent += OnInteraction;
 		Width = (int)trunkRenderer.sprite.rect.width;
-		MAX_HP = HP = 15 * Width;
+		MAX_HP = HP = Width / 2f;
 		//trunkRenderer.sprite = Utils.CloneSpriteUltra(trunkRenderer.sprite);
 
 
@@ -67,7 +67,7 @@ public class NiceTree : MonoBehaviour{
 		float cutHeight = cutHeightPixels / 10f;
 
 		
-		DestroyImmediate(GetComponent<Collider2D>());
+		Destroy(GetComponent<Collider2D>());
 
 
 
@@ -124,7 +124,7 @@ public class NiceTree : MonoBehaviour{
 	void Wound (int direction, float power, bool isChainsaw)
 	{
 
-		if (power < 15 || HP <= 0) return;
+		if (HP <= 0) return;
 		HP -= power;
 	
 		int dir01 = direction == 1 ? 1 : 0;			

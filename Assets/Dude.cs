@@ -116,6 +116,24 @@ public class Dude : MonoBehaviour {
         
     }
 
+	RaycastHit2D hit;
+	public float RayCastDistance = 2;
+
+	public void Chop()
+	{
+
+		hit = Physics2D.Raycast(transform.position + Vector3.up, new Vector2(Orientation, 0), RayCastDistance, LayerMask.GetMask("Zombies", "Trees"));
+
+
+		if (hit.collider != null)
+		{
+			var interactor = hit.collider.gameObject.GetComponent<Interactive>();
+
+			if (interactor != null)
+				interactor.Interact(new ChopAction { power = Power, direction = Orientation, point = hit.point });
+		}
+	}
+
     internal void Drag(float drag)
     {
         _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x * drag, _rigidbody2D.velocity.y);
