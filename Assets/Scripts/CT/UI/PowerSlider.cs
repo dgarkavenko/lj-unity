@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CT;
+using UnityEngine;
 using System.Collections;
 
 public class PowerSlider : MonoBehaviour {

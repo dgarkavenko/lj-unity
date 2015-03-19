@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using CT;
 using System.Collections;
 
 public class MStateGunAim : MStateBase {
@@ -14,10 +15,10 @@ public class MStateGunAim : MStateBase {
 
         if (skipEnter) return;
 
+		var handsAffected = Dude.CurrentWeapon == Dude.WeaponType.DoubleBeretta ? 2 : 1;
+		HandsWithGun = new Transform[handsAffected];
 
-        HandsWithGun = new Transform[Dude.Guns];
-
-        for (int i = 0; i < Dude.Guns; i++)
+		for (int i = 0; i < handsAffected; i++)
         {
             var  hand = Dude.HandsWithGun[i];
             hand.gameObject.SetActive(true);
@@ -28,29 +29,32 @@ public class MStateGunAim : MStateBase {
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
-
-        var direction = new Vector2(Input.GetAxis("hAim"), Input.GetAxis("vAim") * Dude.Orientation);
+        var direction = new Vector2(Input.GetAxis("hAim"), Input.GetAxis("vAim"));
 
         if (direction.magnitude == 0) direction = new Vector2(Dude.Orientation, 0);
 
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Vector3 localScale;
-        if ((Dude.Orientation == -1 && (angle > -60 && angle < 60)) || (Dude.Orientation == 1 && (angle > 120 || angle < -120)))
-            localScale = new Vector3(Dude.Orientation, -Dude.Orientation, 1);
-        else
-            localScale = new Vector3(Dude.Orientation, Dude.Orientation, 1);
+		float angle;
 
-        for (int i = 0; i < HandsWithGun.Length; i++)
+		if (Dude.Orientation == 1)
+			angle = Mathf.Atan2(direction.y, direction.x);
+		else
+			angle = Mathf.Atan2(direction.y, -direction.x) + Mathf.PI;
+
+
+		//TWEAK ANGLES
+		bool flip = (angle > 2 || angle < -2);
+
+		foreach (var hand in HandsWithGun)
         {
-            var hand = HandsWithGun[i];
-            hand.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            hand.localScale = localScale;           
+			hand.localScale = new Vector3(Dude.Orientation, flip ? -1 : 1, 1);
+			hand.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
         }
 
-        if (Input.GetAxis("Shooting") > 0)
-        {
-            Dude.Shot(HandsWithGun.Length);
-        }   
+		if (Input.GetAxis("Shooting") > 0)
+		{
+			Dude.Shot(direction);
+		}   
+
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -58,12 +62,10 @@ public class MStateGunAim : MStateBase {
 
         if (skipExit) return;
 
-        for (int i = 0; i < Dude.Guns; i++)
-        {
-            var hand = Dude.HandsWithGun[i];
-            hand.gameObject.SetActive(false);
-        }
-
+		foreach (var hand in HandsWithGun)		
+			hand.gameObject.SetActive(false);
+		
+      
         Dude.GunAim = false;
 	}
 
