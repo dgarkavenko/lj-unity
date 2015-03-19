@@ -3,31 +3,50 @@ using System.Collections;
 
 public class Dude : MonoBehaviour {
 
+	[Header("Debug")]
     public Rigidbody2D _rigidbody2D;
     public Animator _animator;
 
+	[Header("Movement")]
+
+	public Transform groundCheck;
+	public LayerMask groundMask;
+	public bool Grounded;
+
+	public float NormalMoveSpeed = 7;
+	public float NormalDrag;
+	public float JumpDrag;
+	public Vector2 LiftPower;
+	public Vector2 NormalJump = new Vector2(0, 450);
+	
+	[Header("Axe")]
+	public float MaxPower = 1;
+	public float PowerGain = 0.1f;
+	public float Power;
+	public float RayCastDistance = 2;
+
+
+	[Header("Guns")]
+	public float GunInactivityTime = 2;
+	
+	//Make setters or ignore
+	public int Guns = 1;
+	public int GunsDrawn = 0;
+	public bool GunAim;
+
+
+	[Header("Children")]
     public ParticleSystem[] JumpParticles;
     public GameObject AxePrefab;
     public Transform[] HandsWithGun;
 
-    public Transform groundCheck;
-    public LayerMask groundMask;
-    public float NormalMoveSpeed = 7;
-    public float NormalDrag;
-    public float JumpDrag;
 
-    public Vector2 LiftPower;
-    public Vector2 NormalJump = new Vector2(0, 450);
-
-    public float MaxPower = 1;
-    public float PowerGain = 0.1f;
-    public float Power;
+	private float timeSinceLastAim;
     
-    public bool Grounded;
-    public bool DoubleJumpEnabled;
-    public int Guns = 1;
 
-    public int GunsDrawn = 0;
+    
+    
+    
 
     public event System.Action<int> OrientationChanged;
     
@@ -41,8 +60,6 @@ public class Dude : MonoBehaviour {
 
     void Update()
     {
-
-
         bool pastFrame = Grounded;
         Grounded = Physics2D.Linecast(transform.position, groundCheck.position, groundMask);
 
@@ -81,10 +98,7 @@ public class Dude : MonoBehaviour {
         _animator.SetBool("gun", GunAim);
     }
 
-    public bool GunAim;
-
-    public float GunInactivityTime = 2;
-    private float timeSinceLastAim;
+    
 
     internal void HorizontalMove(int d, float power)
     {
@@ -117,7 +131,6 @@ public class Dude : MonoBehaviour {
     }
 
 	RaycastHit2D hit;
-	public float RayCastDistance = 2;
 
 	public void Chop()
 	{
