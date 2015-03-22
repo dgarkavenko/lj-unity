@@ -26,6 +26,9 @@ public class MStateGunAim : MStateBase {
         }       
 	}
 
+
+    bool down = false;
+
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
@@ -34,15 +37,17 @@ public class MStateGunAim : MStateBase {
         if (direction.magnitude == 0) direction = new Vector2(Dude.Orientation, 0);
 
 		float angle;
+        bool flip;
 
-		if (Dude.Orientation == 1)
-			angle = Mathf.Atan2(direction.y, direction.x);
-		else
-			angle = Mathf.Atan2(direction.y, -direction.x) + Mathf.PI;
-
-
-		//TWEAK ANGLES
-		bool flip = (angle > 2 || angle < -2);
+		if (Dude.Orientation == 1){
+            angle = Mathf.Atan2(direction.y, direction.x);
+            flip = (angle > 2 || angle < -2);
+        }
+        else
+        {
+            angle = Mathf.Atan2(direction.y, -direction.x) + Mathf.PI;
+            flip = !(angle > 5 || angle < 1);
+        }
 
 		foreach (var hand in HandsWithGun)
         {
@@ -50,7 +55,11 @@ public class MStateGunAim : MStateBase {
 			hand.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
         }
 
-		if (Input.GetAxis("Shooting") > 0)
+        var prevState = down;
+        down = Input.GetAxis("Shooting") > 0f;
+               
+        
+        if (down && !prevState)
 		{
 			Dude.Shot(direction);
 		}   

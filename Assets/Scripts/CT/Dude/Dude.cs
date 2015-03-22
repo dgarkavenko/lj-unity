@@ -38,7 +38,7 @@ namespace CT
 		public int GunsDrawn = 0;
 		public bool GunAim;
 
-		public Weapon Ranged;
+		public Weapon[] Ranged;
 		public Weapon Melee;
 
 
@@ -172,11 +172,25 @@ namespace CT
        
 		}
 
+
+        int gunIndex = 0;
+
 		internal void Shot(Vector2 dir)
 		{
-			if(Ranged == null) return;
 
-			Ranged.Trigger(dir);
+            
+            var b = Ranged[gunIndex].Trigger(dir);
+
+
+            if (b)
+            {
+                Debug.Log(gunIndex + " shot");
+            }
+
+            if (Ranged.Length > 1 && b)
+                gunIndex = ++gunIndex % (Ranged.Length);
+
+           
 			timeSinceLastAim = 0;
         
 		}
