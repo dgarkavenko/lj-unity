@@ -19,6 +19,9 @@ public class PowerSlider : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
+		return;
+
         if (Dude.Power <= 0)
         {
             rect.gameObject.SetActive(false);

@@ -22,8 +22,13 @@ public class Lumberjack : MonoBehaviour
 	private Rigidbody2D _rigidbody2D;
 
 
-	public int JumpPower = 650;
-	public int MovementSpeed = 14;
+
+	public float NormalMoveSpeed = 15;
+	public float NormalDrag = 1;
+	public float JumpDrag = 1;
+
+	public Vector2 LiftPower;
+	public Vector2 NormalJump = new Vector2(0, 450);
 
 	// --- TEMP ---
 
@@ -99,17 +104,28 @@ public class Lumberjack : MonoBehaviour
 			}
 		}
 
+
+	    var p = Grounded;
+		Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
+
+		if (p != Grounded && Grounded) Debug.Log("POSADKA");
+
+		Animator.SetBool("moving", Input.GetAxis("Horizontal") != 0);
+		Animator.SetBool("jump", Input.GetAxis("Jump") != 0);
+		Animator.SetBool("grounded", Grounded);
+
+
 		if (_currentEquipContainer != null)
 			_currentEquipContainer.ManualUpdate (pivotScreenPosition, Pivot.position);
     }
 
 
-	void FixedUpdate()
+	void LateUpdate()
 	{
-        Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
-		Animator.SetBool("grounded", Grounded);
-		Animator.SetBool("moving", Moving);
+
 	}
+
+	
 
     private int viewDirection;
     public int ViewDirection
@@ -126,6 +142,8 @@ public class Lumberjack : MonoBehaviour
     }
 
 	private int legsOrientation = 1;
+
+
 	public int LegsOrientation
 	{
 		get { return legsOrientation; }
@@ -144,20 +162,24 @@ public class Lumberjack : MonoBehaviour
 
 	public void Jump()
 	{
-		_rigidbody2D.AddForce(new Vector2(0, JumpPower));
-	}
-
-	public void Move(int d, bool real)
-	{
-		if (d != 0)
-			LegsOrientation = d;
-
-		_rigidbody2D.velocity = new Vector2(MovementSpeed * d, _rigidbody2D.velocity.y);
-		
+		if(Grounded)
+			_rigidbody2D.AddForce(NormalJump);
 	}
 
 	public void Stop()
 	{
 		//_rigidbody2D.velocity = new Vector2(0, _rigidbody2D.velocity.y);
+	}
+
+	public void HorizontalMove(int d, float normalMoveSpeed)
+	{
+		_rigidbody2D.velocity = new Vector2(normalMoveSpeed * d, _rigidbody2D.velocity.y);
+		LegsOrientation = d;
+	}
+
+	public void Drag(float drag)
+	{
+		_rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x * drag, _rigidbody2D.velocity.y);
+
 	}
 }

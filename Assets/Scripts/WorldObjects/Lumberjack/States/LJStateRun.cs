@@ -4,20 +4,13 @@ using System.Collections;
 public class LJStateRun : LJStateBase {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-	//override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	//
-	//}
+	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		//Debug.Log("enter state run");
+	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		
-		if (Input.GetKeyDown(KeyCode.W))
-		{
-			lj.Jump();
-		}
-
-		MoveBehaviour(true);
-
+		lj.HorizontalMove(Input.GetAxis("Horizontal") > 0 ? 1 : -1, lj.NormalMoveSpeed);   
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
