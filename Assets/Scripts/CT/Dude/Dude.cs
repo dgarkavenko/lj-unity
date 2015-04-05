@@ -178,20 +178,6 @@ namespace CT
 		internal void Shot(Vector2 dir)
 		{
 
-            
-            var b = Ranged[gunIndex].Trigger(dir);
-
-
-            if (b)
-            {
-                Debug.Log(gunIndex + " shot");
-            }
-
-            if (Ranged.Length > 1 && b)
-                gunIndex = ++gunIndex % (Ranged.Length);
-
-           
-			timeSinceLastAim = 0;
         
 		}
 

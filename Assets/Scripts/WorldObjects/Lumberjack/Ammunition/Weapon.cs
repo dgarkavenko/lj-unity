@@ -10,30 +10,27 @@
 using System;
 using UnityEngine;
 
-public class Weapon
+public class Weapon : MonoBehaviour
 {
-    public DeadlyThings.Types relatedTypes;
-	protected int rayCastDistance;
-    protected SpriteRenderer renderer;
-	protected Animator animator;
 
-	public virtual void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPosition){
-	}
+    [EnumFlagsAttribute]
+    public DeadlyThings.Types RelatedTypes;
+	public int RayCastDistance;
+    public SpriteRenderer Renderer;
+    public Animator Animator;
+    public Lumberjack Lumberjack;
 
 	public virtual void SetWeapon(WeaponData wd){
 	}
-
-	public Weapon(GameObject parent){
-		renderer = parent.GetComponent<SpriteRenderer>();
-		animator = parent.GetComponent<Animator>();
-	}
-
+      
 	public virtual void Kill ()
 	{
+        gameObject.SetActive(false);
 	}
 
 	public virtual void Init ()
 	{
+        gameObject.SetActive(true);
 	}
 }
 

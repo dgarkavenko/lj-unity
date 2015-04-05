@@ -13,6 +13,7 @@ public class GameplayData : ScriptableObject {
             if (instance == null)
             {
                 instance = Resources.Load("Data/Config") as GameplayData;
+    
                 if (instance == null)
                 {
                     instance = ScriptableObject.CreateInstance<GameplayData>();
@@ -27,4 +28,6 @@ public class GameplayData : ScriptableObject {
 
     public GunData[] guns;
 	public ToolData[] tools;
+
+    
 }

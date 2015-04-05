@@ -19,25 +19,34 @@ public class Gun : Weapon
     public int currentFrame = 0;
 
     public Trace trace;
+    public ParticleSystem gunfire;
 
-	public Gun (GameObject parent) : base (parent)
-	{
-		relatedTypes = DeadlyThings.ANY_GUN;
-		rayCastDistance = 100;
 
+    void Start()
+    {
         trace = GameObject.Find("Trace").GetComponent<Trace>();
-	}
+        gunfire = GameObject.Find("Gunfire").GetComponent<ParticleSystem>();        
+    }
 
 	void Reload ()
 	{
 		throw new NotImplementedException ();
 	}
 
-	override public void ManualUpdate(Vector2 pivotScreenPosition, Vector2 pivotPosition){
+
+    void LateUpdate()
+    {
+        BruteRotation(Mathf.Abs(Rad180(dirPolar)));
+    }
 
 
-        float rad = Mathf.Atan2(Input.mousePosition.y - pivotScreenPosition.y, Input.mousePosition.x - pivotScreenPosition.x);
-        BruteRotation(Mathf.Abs(Rad180(rad)));
+    float dirPolar;
+
+	void Update(){
+
+        dirPolar = Mathf.Atan2(Input.mousePosition.y - Lumberjack.PivotScreenPosition.y, Input.mousePosition.x - Lumberjack.PivotScreenPosition.x);
+        origin = Lumberjack.PivotPosition + new Vector2(gd.gunpoints[currentFrame].x * Lumberjack.ViewDirection, gd.gunpoints[currentFrame].y);
+        gunfire.transform.position = origin + Vector2.up * 0.05f;
 
 		//Recoil reduction
 		if (recoil > 0) {
@@ -71,7 +80,7 @@ public class Gun : Weapon
 		if (gd.mode == GunData.Mode.auto) {
 			if (IsReloaded){
 				if (IsReady){
-					Shot(pivotScreenPosition, pivotPosition);
+                    Shot();
 				}
 			}else{
 				//AmmunitionWithin
@@ -80,19 +89,22 @@ public class Gun : Weapon
 			if (!Input.GetMouseButtonDown(0)) return;
 			if (IsReloaded){
 				if (IsReady){
-					Shot(pivotScreenPosition, pivotPosition);
+                    Shot();
 				}
 			}else{
 				//AmmunitionWithin
 			}
 		}
 
+      
 
 	}
 
 	RaycastHit2D hit;
 
-	void Shot (Vector2 pivotScreenPosition, Vector2 pivotPosition)
+    private Vector2 origin;
+
+	void Shot ()
 	{
 
 		cooldown = 60 / gd.rate;
@@ -103,25 +115,22 @@ public class Gun : Weapon
 			//WarriorWithin damage 2 lj
 		}
 
-		//TODO VFX
-
-		float dirPolar = (float)Math.Atan2(Input.mousePosition.y - pivotScreenPosition.y, Input.mousePosition.x - pivotScreenPosition.x);
 		dirPolar += (gd.dispersion + recoil) * UnityEngine.Random.Range(-1f, 1f);
-
         Vector2 dir = new Vector2(Mathf.Cos(dirPolar), Mathf.Sin(dirPolar));
 
-		Vector2 origin = renderer.transform.position;
-        int intDir = Input.mousePosition.x > pivotScreenPosition.x ? 1 : -1;
-        origin += new Vector2(gd.gunpoints[currentFrame].x * intDir, gd.gunpoints[currentFrame].y);
+        hit = Physics2D.Raycast(Lumberjack.PivotPosition, dir, RayCastDistance, LayerMask.GetMask("Zombies"));
 
-		hit = Physics2D.Raycast(pivotPosition, dir, rayCastDistance, LayerMask.GetMask("Zombies"));
+        gunfire.startRotation = -dirPolar;
+        gunfire.Emit(1);
+
         if (hit.collider != null)
         {
 			var IR = hit.collider.gameObject.GetComponent<Interactive>();
 			if (IR != null){
 				IR.Interact(new GunShotAction{
 					power = UnityEngine.Random.Range(gd.damage_min, gd.damage_max),
-					point = hit.point, direction = intDir,
+					point = hit.point,
+                    direction = Lumberjack.ViewDirection,
 					force = gd.force});
 			}
 
@@ -129,7 +138,7 @@ public class Gun : Weapon
 
         }
         else
-            trace.Show(origin + dir, pivotPosition + dir * 100);
+            trace.Show(origin + dir, origin + dir * 100);
         
 	}
 
@@ -204,7 +213,7 @@ public class Gun : Weapon
         else
             currentFrame = 0;
 
-        renderer.sprite = gd.frames[currentFrame];
+        Renderer.sprite = gd.frames[currentFrame];
     }
 }
 

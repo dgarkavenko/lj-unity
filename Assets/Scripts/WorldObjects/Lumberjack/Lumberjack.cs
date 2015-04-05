@@ -12,12 +12,23 @@ public class Lumberjack : MonoBehaviour
 	
     public Transform Body;
     public Transform Pivot;
+
+
+    
+    public Vector2 PivotPosition
+    {
+        get
+        {
+            return Pivot.position;
+        }
+    }
+    public Vector2 PivotScreenPosition;
 	public GameObject Hands;
 
 	public Animator Animator;
 	   
 	private Weapon _currentEquipContainer;
-	private Weapon[] _allEquipContainers;
+	public Weapon[] AllEquipContainers;
 
 	private Rigidbody2D _rigidbody2D;
 
@@ -39,8 +50,9 @@ public class Lumberjack : MonoBehaviour
 
 	void Start () {
 
-		_allEquipContainers = new Weapon[]{new Gun (Hands), new Axe (Hands)};
-		_currentEquipContainer = _allEquipContainers [0];
+
+        var r = Hands.GetComponent<SpriteRenderer>();
+		_currentEquipContainer = AllEquipContainers [0];
 
 		GunData gd = GameplayData.Instance.guns[0];		
 		_currentEquipContainer.SetWeapon(gd);
@@ -59,8 +71,8 @@ public class Lumberjack : MonoBehaviour
 
 		Debug.Log ("Switching to: " + wd.alias);
 
-		foreach (var container in _allEquipContainers) {
-			if((container.relatedTypes & wd.type) == wd.type){
+		foreach (var container in AllEquipContainers) {
+			if((container.RelatedTypes & wd.type) == wd.type){
 
 				if (_currentEquipContainer != container)
 				{
@@ -83,8 +95,8 @@ public class Lumberjack : MonoBehaviour
 
     void Update()
     {
-        var pivotScreenPosition = Camera.main.WorldToScreenPoint(Pivot.position);
-        ViewDirection = pivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
+        PivotScreenPosition = Camera.main.WorldToScreenPoint(Pivot.position);
+        ViewDirection = PivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
 
 		int alpha1 = (int)KeyCode.Alpha1;
 
@@ -108,24 +120,19 @@ public class Lumberjack : MonoBehaviour
 	    var p = Grounded;
 		Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
 
-		if (p != Grounded && Grounded) Debug.Log("POSADKA");
+        if (!p && Grounded)
+        {
+            //VFX
+            var dust = GameObject.Find("Dust").GetComponent<ParticleSystem>();
+            dust.transform.position = transform.position + Vector3.up * 0.05f;
+            dust.Play();            
+        }
 
 		Animator.SetBool("moving", Input.GetAxis("Horizontal") != 0);
 		Animator.SetBool("jump", Input.GetAxis("Jump") != 0);
 		Animator.SetBool("grounded", Grounded);
-
-
-		if (_currentEquipContainer != null)
-			_currentEquipContainer.ManualUpdate (pivotScreenPosition, Pivot.position);
+        
     }
-
-
-	void LateUpdate()
-	{
-
-	}
-
-	
 
     private int viewDirection;
     public int ViewDirection
