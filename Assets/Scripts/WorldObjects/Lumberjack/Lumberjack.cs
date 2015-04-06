@@ -169,8 +169,15 @@ public class Lumberjack : MonoBehaviour
 
 	public void Jump()
 	{
-		if(Grounded)
-			_rigidbody2D.AddForce(NormalJump);
+		if (Grounded)
+		{
+			//_rigidbody2D.AddForce(NormalJump);
+			_rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, NormalJump.y * Time.fixedDeltaTime);
+		
+		}
+
+
+			//
 	}
 
 	public void Stop()
