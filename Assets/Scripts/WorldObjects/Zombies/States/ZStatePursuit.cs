@@ -5,15 +5,23 @@ using System.Collections;
 public class ZStatePursuit : ZStateBase {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-	//override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	//
-	//}
+	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+
+        Zombie.StartCoroutine(LifetimeCoroutine());
+        Zombie.worried = true;
+
+	}
+
+    override public void OnStateTimeExpired()
+    {
+        Zombie.worried = false;
+    }
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Zombie.ViewDirection = LjTransform.position.x < Zombie.transform.position.x ? -1 : 1;
-		Zombie.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(Zombie.ViewDirection*30, 0));
-		
+
+        Zombie.HorizontalMove(LjTransform.position.x < Zombie.transform.position.x ? -1 : 1, Zombie.NormalMoveSpeed);
+	
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

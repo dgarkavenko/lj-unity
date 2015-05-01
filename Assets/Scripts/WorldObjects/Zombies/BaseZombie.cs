@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseZombie : MonoBehaviour {
+public class BaseZombie : Actor {
 
 
 	public bool hit;
-
-	public float cooldown = 0;
 
 	public void OnHitFrame(){
 		hit = true;
@@ -14,13 +12,8 @@ public class BaseZombie : MonoBehaviour {
 
 	public EnemyConditions condition;
 	public EnemyState state;
-	public Schedule currentSchedule;
 
-	protected Schedule stand;
-	protected Schedule walk;
-	protected Schedule pursuit;
-	protected Schedule meleeAttack;
-	protected Schedule rangedAttack;
+    public float NormalMoveSpeed;
 
 	public int meleeAttackRange = 1;
 	public float meleeAttackCooldown = 2;
@@ -37,7 +30,7 @@ public class BaseZombie : MonoBehaviour {
 
 	public bool worried = false;
 
-	public Animator animator;
+	public Animator Animator;
 
 
 	public int ViewDirection
@@ -54,14 +47,22 @@ public class BaseZombie : MonoBehaviour {
 		}
 	}
 
-	void Awake(){
-	
-		if (animator == null) animator = GetComponentInChildren<Animator> ();
-		IR.InteractionEvent += OnInteractionEvent;
-		conditionsUpdateTime = conditionsRefreshRate / 60f;
-		foreach (var zstate in animator.GetBehaviours<ZStateBase>()) zstate.Zombie = this;
+	public override void Awake(){
 
+        base.Awake();
+
+		if (Animator == null) Animator = GetComponentInChildren<Animator> ();
+		IR.InteractionEvent += OnInteractionEvent;
+		foreach (var zstate in Animator.GetBehaviours<ZStateBase>()) zstate.Zombie = this;
+        
 	}
+
+    public void Start()
+    {
+        conditionsUpdateTime = conditionsRefreshRate / 60f;
+        StartCoroutine(ConditionsUpdateLoop());
+        
+    }
 
 	//TODO DG Temporary
 	void TEMP_ShowVFX(int dir, Vector2 point){
@@ -106,18 +107,26 @@ public class BaseZombie : MonoBehaviour {
 	protected float conditionsUpdate = 0;
 
 	void Update(){
-		
-		conditionsUpdate += Time.deltaTime;
-		cooldown -= Time.deltaTime;
-		
-		if (conditionsUpdate >= conditionsUpdateTime) {
-			conditionsUpdate -= conditionsUpdateTime;
-			ZombieMind.Instance.GetPositionConditions(this);
-			animator.SetBool("on_cooldown", cooldown > 0);
-		}
+	
 
 	}
 
+    public IEnumerator ConditionsUpdateLoop()
+    {
+        do{
+            yield return new WaitForSeconds(conditionsUpdateTime);
+            ZombieMind.Instance.GetPositionConditions(this);
+
+        }while(true);
+    }
+
+    public void HorizontalMove(int d, float MoveSpeed)
+    {
+        ViewDirection = d;
+        _rigidbody2D.velocity = new Vector2(MoveSpeed * d, _rigidbody2D.velocity.y);
+    }
+
+  
 
 
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Lumberjack : MonoBehaviour
+public class Lumberjack : Actor
 {
 
 
@@ -30,10 +30,6 @@ public class Lumberjack : MonoBehaviour
 	private Weapon _currentEquipContainer;
 	public Weapon[] AllEquipContainers;
 
-	private Rigidbody2D _rigidbody2D;
-
-
-
 	public float NormalMoveSpeed = 15;
 	public float NormalDrag = 1;
 	public float JumpDrag = 1;
@@ -57,7 +53,6 @@ public class Lumberjack : MonoBehaviour
 		GunData gd = GameplayData.Instance.guns[0];		
 		_currentEquipContainer.SetWeapon(gd);
 
-		_rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 		Animator = gameObject.GetComponent<Animator>();
 
 		foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
@@ -128,6 +123,7 @@ public class Lumberjack : MonoBehaviour
             dust.Play();            
         }
 
+
 		Animator.SetBool("moving", Input.GetAxis("Horizontal") != 0);
 		Animator.SetBool("jump", Input.GetAxis("Jump") != 0);
 		Animator.SetBool("grounded", Grounded);
@@ -175,7 +171,7 @@ public class Lumberjack : MonoBehaviour
 			_rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, NormalJump.y * Time.fixedDeltaTime);
 		
 		}
-
+        
 
 			//
 	}
@@ -191,9 +187,5 @@ public class Lumberjack : MonoBehaviour
 		LegsOrientation = d;
 	}
 
-	public void Drag(float drag)
-	{
-		_rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x * drag, _rigidbody2D.velocity.y);
-
-	}
+	
 }
