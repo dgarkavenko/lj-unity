@@ -32,6 +32,12 @@ public class Weapon : MonoBehaviour
 	{
         gameObject.SetActive(true);
 	}
+
+    public virtual T GetData<T>() where T:WeaponData 
+    {
+        return null;
+    }
+
 }
 
 

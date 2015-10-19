@@ -37,26 +37,41 @@ public class Lumberjack : Actor
 	public Vector2 LiftPower;
 	public Vector2 NormalJump = new Vector2(0, 450);
 
-	// --- TEMP ---
+    public event System.Action<Weapon> OnWeaponSwithced;
+
+    private int[] _ammo = new int[] { 100, 20, 30, 40 };
 
 
+    public int ReloadAndCheck(GunData.EAmmo type, int max, bool withdraw)
+    {
+        var count = Mathf.Min(max, _ammo[(int)type]);
+        if (withdraw)
+        {
+            _ammo[(int)type] -= count;           
+        }
+        return count;
+    }
 
-	// --- TEMP ---
-
+	
+  
 
 	void Start () {
 
-
         var r = Hands.GetComponent<SpriteRenderer>();
+
+        var gun = (AllEquipContainers[0] as Gun);
+        gun.ReloadDelegate += ReloadAndCheck;
+        
 		_currentEquipContainer = AllEquipContainers [0];
 
-		GunData gd = GameplayData.Instance.guns[0];		
-		_currentEquipContainer.SetWeapon(gd);
+		GunData gd = GameplayData.Instance.guns[0];
+        SelectWeapon(gd);
 
 		Animator = gameObject.GetComponent<Animator>();
 
 		foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
 
+        _localPivotPosition =  transform.InverseTransformPoint(Pivot.transform.position);
 
 		ZStateBase.LjTransform = this.transform;
 
@@ -80,7 +95,8 @@ public class Lumberjack : Actor
 			}
 		}
 
-		_currentEquipContainer.SetWeapon(wd);		
+        _currentEquipContainer.SetWeapon(wd);
+        if (OnWeaponSwithced != null) OnWeaponSwithced(_currentEquipContainer);
 	}
 
     private void OnMovementDirectionChanged(int dir)
@@ -88,9 +104,11 @@ public class Lumberjack : Actor
         Body.localScale = new Vector3(ViewDirection * legsOrientation, 1, 1);
     }
 
+    private Vector3 _localPivotPosition;
+
     void Update()
     {
-        PivotScreenPosition = Camera.main.WorldToScreenPoint(Pivot.position);
+        PivotScreenPosition = Camera.main.WorldToScreenPoint(transform.TransformPoint(_localPivotPosition));
         ViewDirection = PivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
 
 		int alpha1 = (int)KeyCode.Alpha1;

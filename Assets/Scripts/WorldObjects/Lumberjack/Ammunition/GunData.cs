@@ -13,16 +13,25 @@ using UnityEngine;
 [System.Serializable]
 public class GunData : WeaponData
 {
-	public enum Mode{
+	public enum EMode{
 		auto,
 		semi
 	}
+
+    public enum EAmmo
+    {
+        mm9,
+        mm556,
+        mm762,
+        shells
+    }
 
 	public int ammo_max;
 	public int ammo_current;
 	public float reload_time;
 	public float rate;
-	public Mode mode = Mode.semi;
+	public EMode mode = EMode.semi;
+    public EAmmo ammoType = EAmmo.mm9;
 	public float dispersion;
 	public int fragments;
 	public int damage_min;

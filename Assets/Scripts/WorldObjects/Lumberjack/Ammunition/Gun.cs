@@ -15,12 +15,18 @@ public class Gun : Weapon
 
 	public GunData gd;
 	public float recoil;
-	public float cooldown;
+	public float nextShot;
     public int currentFrame = 0;
 
     public Trace trace;
     public ParticleSystem gunfire;
 
+    public delegate int AmmoDelegate(GunData.EAmmo ammo, int max, bool withdraw);
+
+    public AmmoDelegate ReloadDelegate;
+    public event Action OnShot;
+    public event Action<bool> OnReload;
+    
 
     void Start()
     {
@@ -30,7 +36,15 @@ public class Gun : Weapon
 
 	void Reload ()
 	{
-		throw new NotImplementedException ();
+        if (IsReloading) return;
+
+        if (ReloadDelegate != null && ReloadDelegate(gd.ammoType, 1, false) > 0){
+            gd.reload_time_left = gd.reload_time;
+            if (OnReload != null) OnReload(true);
+        }   
+        else
+            Debug.Log("No ammo");        
+
 	}
 
 
@@ -41,6 +55,19 @@ public class Gun : Weapon
 
 
     float dirPolar;
+
+
+    void Reloading()
+    {
+        gd.reload_time_left -= Time.deltaTime;
+        if (gd.reload_time_left <= 0)
+        {
+            gd.ammo_current = ReloadDelegate(gd.ammoType, gd.ammo_max, true);
+            if (OnReload != null) OnReload(false);
+        }
+            
+
+   }
 
 	void Update(){
 
@@ -55,30 +82,20 @@ public class Gun : Weapon
 
 		//Force Reload
 		if (Input.GetKeyDown (KeyCode.R)) {
-			if (gd.ammo_current < gd.ammo_max) Reload();
+			if (!FullAmmo) Reload();
 		}
 
 		//Reloading process
 		//TODO add shotgun style relaoding
-		if (gd.reload_time_left > 0) {
-			gd.reload_time_left -= Time.deltaTime;
-			if (gd.reload_time_left <= 0){
-				gd.ammo_current = gd.ammo_max;
-			}
-		}
-
-		//Cooldown
-		if (cooldown > 0) {
-			cooldown-= Time.deltaTime;
-		}
+		if (gd.reload_time_left > 0) Reloading();		
 
 		//LMB Pressed or JustPressed
 		if (!Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0))
 			return;
 
 		//Shooting
-		if (gd.mode == GunData.Mode.auto) {
-			if (IsReloaded){
+		if (gd.mode == GunData.EMode.auto) {
+			if (!IsReloading){
 				if (IsReady){
                     Shot();
 				}
@@ -87,7 +104,7 @@ public class Gun : Weapon
 			}
 		} else {
 			if (!Input.GetMouseButtonDown(0)) return;
-			if (IsReloaded){
+			if (!IsReloading){
 				if (IsReady){
                     Shot();
 				}
@@ -95,10 +112,7 @@ public class Gun : Weapon
 				//AmmunitionWithin
 			}
 		}
-
-      
-
-	}
+    }
 
 	RaycastHit2D hit;
 
@@ -107,13 +121,21 @@ public class Gun : Weapon
 	void Shot ()
 	{
 
-		cooldown = 60 / gd.rate;
-		if (gd.reload_time_left <= 0)
-			gd.ammo_current--;
-		else
-		{
-			//WarriorWithin damage 2 lj
-		}
+        if (IsReloading || !IsReady) return;
+
+        if (!HasAmmo)
+        {   
+            Reload();
+            return;
+        }
+
+       
+
+        nextShot = Time.time + 60 / gd.rate;
+
+		gd.ammo_current--;
+        if (OnShot != null) OnShot();
+
 
 		dirPolar += (gd.dispersion + recoil) * UnityEngine.Random.Range(-1f, 1f);
         Vector2 dir = new Vector2(Mathf.Cos(dirPolar), Mathf.Sin(dirPolar));
@@ -142,13 +164,41 @@ public class Gun : Weapon
         
 	}
 
-	public bool IsReloaded{
-		get { return gd.reload_time_left <= 0; }
+
+    public override void Init()
+    {
+        base.Init();
+        if (!HasAmmo) Reload();
+    }
+
+    public override void Kill()
+    {
+        base.Kill();
+        gd.reload_time_left = 0;        
+    }
+
+    public override T GetData<T>()
+    {
+        return gd as T;
+    }
+
+	public bool IsReloading{
+		get { return gd.reload_time_left > 0; }
 	}
 
 	public bool IsReady{
-		get { return cooldown <= 0; }
+		get { return nextShot <= Time.time; }
 	}
+
+    public bool HasAmmo
+    {
+        get { return gd.ammo_current > 0;}
+    }
+
+    public bool FullAmmo
+    {
+        get { return gd.ammo_current >= gd.ammo_max; }
+    }
 
 	override public void SetWeapon(WeaponData wd){
 		gd = wd as GunData;

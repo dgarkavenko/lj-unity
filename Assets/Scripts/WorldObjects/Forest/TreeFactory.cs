@@ -5,6 +5,7 @@ public class TreeFactory : MonoBehaviour {
 	public TreePreset[] Presets;
 	public Branches Branches;
 	public NiceTree Prefab;
+    public Material Material;
 
 	void Start(){
 
@@ -40,6 +41,7 @@ public class TreeFactory : MonoBehaviour {
 
 		go = new GameObject ("trunk");
 		tree.trunkRenderer = go.AddComponent<SpriteRenderer> ();
+        tree.trunkRenderer.material = Material;
 
 		int trunkId = Random.Range (0, preset.trunks.Length);
 
@@ -51,6 +53,7 @@ public class TreeFactory : MonoBehaviour {
 			
 		go = new GameObject ("treetop");
 		tree.treetopRenderer = go.AddComponent<SpriteRenderer> ();
+        tree.treetopRenderer.material = Material;
 		tree.treetopRenderer.sprite = preset.treetops [Random.Range (0, preset.treetops.Length)];	
 
 		tree.treetopRenderer.sortingLayerName = tree.trunkRenderer.sortingLayerName = sln;
@@ -64,6 +67,7 @@ public class TreeFactory : MonoBehaviour {
 			
 			go = new GameObject ("skirt");
 			var skirtRenderer = go.AddComponent<SpriteRenderer> ();
+            skirtRenderer.material = Material;
 			skirtRenderer.sprite = preset.skirts [Random.Range (0, preset.skirts.Length)];
 			skirtRenderer.transform.parent = tree.transform;
 			skirtRenderer.sortingLayerName = sln;
@@ -107,7 +111,11 @@ public class TreeFactory : MonoBehaviour {
 		for (int i = 0; i < count; i++) {			
 			var branches = side == -1? Branches.left : Branches.right;			
 			go = new GameObject ("branch");
-			go.AddComponent<SpriteRenderer> ().sprite = branches[Random.Range(0, branches.Length)];
+            var branch = go.AddComponent<SpriteRenderer>();
+                
+            branch.sprite = branches[Random.Range(0, branches.Length)];
+            branch.material = Material;
+
 			go.transform.parent = tree.transform;
 			go.transform.localPosition = new Vector2(side * (tree.trunkRenderer.sprite.rect.width - Random.Range(0, 5))/ 20f, height);			
 			height += clearence / (float)(count + 1) + Random.Range(-0.1f, 0.3f);
