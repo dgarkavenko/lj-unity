@@ -17,10 +17,7 @@ public class Gun : Weapon
 	public float recoil;
 	public float nextShot;
     public int currentFrame = 0;
-
-    public Trace trace;
-    public ParticleSystem gunfire;
-
+	
     public delegate int AmmoDelegate(GunData.EAmmo ammo, int max, bool withdraw);
 
     public AmmoDelegate ReloadDelegate;
@@ -30,8 +27,6 @@ public class Gun : Weapon
 
     void Start()
     {
-        trace = GameObject.Find("Trace").GetComponent<Trace>();
-        gunfire = GameObject.Find("Gunfire").GetComponent<ParticleSystem>();        
     }
 
 	void Reload ()
@@ -72,8 +67,6 @@ public class Gun : Weapon
 	void Update(){
 
         dirPolar = Mathf.Atan2(Input.mousePosition.y - Lumberjack.PivotScreenPosition.y, Input.mousePosition.x - Lumberjack.PivotScreenPosition.x);
-        origin = Lumberjack.PivotPosition + new Vector2(gd.gunpoints[currentFrame].x * Lumberjack.ViewDirection, gd.gunpoints[currentFrame].y);
-        gunfire.transform.position = origin + Vector2.up * 0.05f;
 
 		//Recoil reduction
 		if (recoil > 0) {
@@ -129,21 +122,22 @@ public class Gun : Weapon
             return;
         }
 
-       
-
         nextShot = Time.time + 60 / gd.rate;
 
 		gd.ammo_current--;
         if (OnShot != null) OnShot();
 
+		origin = Lumberjack.PivotPosition + new Vector2(gd.gunpoints[currentFrame].x * Lumberjack.ViewDirection, gd.gunpoints[currentFrame].y);
 
-		dirPolar += (gd.dispersion + recoil) * UnityEngine.Random.Range(-1f, 1f);
-        Vector2 dir = new Vector2(Mathf.Cos(dirPolar), Mathf.Sin(dirPolar));
+
+
+		var dirPolarWDispersion = dirPolar + (gd.dispersion + recoil) * UnityEngine.Random.Range(-1f, 1f);
+		Vector2 dir = new Vector2(Mathf.Cos(dirPolarWDispersion), Mathf.Sin(dirPolarWDispersion));
 
         hit = Physics2D.Raycast(Lumberjack.PivotPosition, dir, RayCastDistance, LayerMask.GetMask("Zombies"));
 
-        gunfire.startRotation = -dirPolar;
-        gunfire.Emit(1);
+
+		var hitPoint = origin + dir*100;
 
         if (hit.collider != null)
         {
@@ -156,12 +150,15 @@ public class Gun : Weapon
 					force = gd.force});
 			}
 
-			trace.Show(origin + dir, hit.point);
-
+	        hitPoint = hit.point;
         }
-        else
-            trace.Show(origin + dir, origin + dir * 100);
-        
+
+		VFX.Instance.GunfireAt(origin, -dirPolar, dir, hitPoint, GunpointPosition);
+	}
+
+	public Vector2 GunpointPosition()
+	{
+		return Lumberjack.PivotPosition + new Vector2(gd.gunpoints[currentFrame].x * Lumberjack.ViewDirection, gd.gunpoints[currentFrame].y);
 	}
 
 
