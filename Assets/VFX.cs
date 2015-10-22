@@ -6,11 +6,105 @@ using Object = UnityEngine.Object;
 
 public class VFX : MonoBehaviour {
 
+   
 
-    public ParticleSystem Blood;
-	public ParticleSystem[] Gunfire;
-	public Light Light;
-	public AnimationCurve LightIntencityCurve;
+
+    [System.Serializable]
+    public class LJEffect {        
+
+        public ParticleSystem Burst;
+
+        [MinMaxVec2(0,30)]
+        public Vector2 Count;
+        [MinMaxVec2(0, 10)]
+        public Vector2 Lifetime;
+        [MinMaxVec2(0, 10)]
+        public Vector2 Size;
+
+        [MinMaxVec2(-Mathf.PI, Mathf.PI)]
+        public Vector2 Spread;
+
+        [MinMaxVec2(0, 15)]
+        public Vector2 Speed;
+
+        public ParticleSystem Follow;
+        public Light Light;
+        public AnimationCurve LightIntensity;
+
+        private PositionDelegate _getTargetPosition;
+        public float StartTime;
+
+        public void Update() {
+
+            if (_getTargetPosition == null) return;
+            var pos = _getTargetPosition();
+            Follow.transform.position = pos;
+
+            if (Light == null) return;
+            var lightZ = Light.transform.position.z;
+            Light.transform.position = new Vector3(pos.x, pos.y, lightZ);
+            Light.intensity = LightIntensity.Evaluate(Time.time - StartTime);
+        }
+
+        public bool IsAlive() {
+            var f = Follow != null && Follow.IsAlive();
+            var l = Light != null && (Time.time - StartTime) < LightIntensity.keys[LightIntensity.keys.Length - 1].time;
+            return f || l;
+        }
+
+
+        public void Off() {
+            Debug.Log("Off");
+
+            Light.intensity = 0;
+        }
+
+        public void Play(Vector3 position, float rotation, PositionDelegate positionDelegate = null, float count = -1)
+        {
+
+            if (Light != null || Follow != null)
+            {
+                VFX.Instance._live.Add(this);
+                StartTime = Time.time;
+            }
+
+            _getTargetPosition = positionDelegate;
+
+
+            if (Follow != null)
+            {
+                Follow.transform.position = position;
+                Follow.startRotation = rotation;
+                Follow.Play();
+            }
+
+            if(Burst != null)
+            {
+                ParticleSystem.Particle _particle = new ParticleSystem.Particle();
+                _particle.position = position;
+
+                var ln = count > 0 ? count : Count.RandomInt();
+
+                for (int i = 0; i < (ln); i++)
+                {
+                    _particle.velocity = GetRandomVelocity(rotation);
+                    _particle.lifetime = _particle.startLifetime = Lifetime.RandomFloat();
+                    _particle.size = Size.RandomFloat();
+                    Burst.Emit(_particle);
+                }
+            }
+
+           
+        }
+
+        Vector2 GetRandomVelocity(float inputDirection)
+        {
+            var dirPolarWDispersion = inputDirection + Spread.RandomFloat();
+            return new Vector2(Mathf.Cos(dirPolarWDispersion), Mathf.Sin(dirPolarWDispersion)) * Speed.RandomFloat();
+        }
+    }
+
+    public LJEffect[] Effects;
 
 	private static VFX _instance;
 	public static VFX Instance
@@ -23,16 +117,7 @@ public class VFX : MonoBehaviour {
 
 	private ParticleSystem.Particle _gunParticle = new ParticleSystem.Particle();
 
-	private Stack<LiveGunfire> _stack = new Stack<LiveGunfire>();
-	private List<LiveGunfire> _live = new List<LiveGunfire>();
-
-	public struct LiveGunfire
-	{
-		public ParticleSystem Sys;
-		public PositionDelegate Position;
-		public float StartTime;
-	}
-
+	private List<LJEffect> _live = new List<LJEffect>();
 	public delegate Vector2 PositionDelegate();
 
 	public void Awake()
@@ -45,53 +130,35 @@ public class VFX : MonoBehaviour {
 			Object.Destroy(this);
 		}
 
-		for (int i = 0; i < 3; i++)
-		{
-			_stack.Push(new LiveGunfire()
-			{
-				Sys = Object.Instantiate(Gunfire[0])
-			});
-		}
-	}
-
-    public void GunfireAt(Vector3 position, float rotation, Vector3 dir, Vector3 hit, PositionDelegate positionDelegate)
-    {
-	    var effect = _stack.Pop();
-	    
-	    effect.Position = positionDelegate;
-
-	    effect.Sys.transform.position = positionDelegate();
-	    effect.Sys.startRotation = rotation;
-		effect.Sys.Emit(1);
-	    effect.StartTime = Time.time;
-
-		_live.Add(effect);
-
-    }
+	
+	} 
 
 	public void Update()
 	{
 		for (int index = _live.Count - 1; index > -1 ; index--)
 		{
-			var liveGunfire = _live[index];
-			if (liveGunfire.Sys.IsAlive())
+			var liveEffect = _live[index];
+			if (liveEffect.IsAlive())
 			{
-
-				var pos = liveGunfire.Position();
-
-				liveGunfire.Sys.transform.position = pos;
-
-				var lightZ = Light.transform.position.z;
-
-				Light.transform.position = new Vector3(pos.x, pos.y, lightZ);
-				Light.intensity = LightIntencityCurve.Evaluate(Time.time - liveGunfire.StartTime);
+                liveEffect.Update();                
 			}
 			else
 			{
-				Light.intensity = 0;
+                liveEffect.Off();
 				_live.RemoveAt(index);
-				_stack.Push(liveGunfire);
 			}
 		}
 	}
+}
+
+public static class Vector2Extension
+{
+    public static float RandomFloat(this Vector2 v)
+    {
+        return UnityEngine.Random.Range(v.x, v.y);
+    }
+    public static int RandomInt(this Vector2 v)
+    {
+        return (int)UnityEngine.Random.Range(v.x, v.y);
+    }
 }

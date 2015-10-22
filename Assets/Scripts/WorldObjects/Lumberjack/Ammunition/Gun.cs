@@ -153,7 +153,7 @@ public class Gun : Weapon
 	        hitPoint = hit.point;
         }
 
-		VFX.Instance.GunfireAt(origin, -dirPolar, dir, hitPoint, GunpointPosition);
+		VFX.Instance.Effects[0].Play(origin, -dirPolar, GunpointPosition);
 	}
 
 	public Vector2 GunpointPosition()
