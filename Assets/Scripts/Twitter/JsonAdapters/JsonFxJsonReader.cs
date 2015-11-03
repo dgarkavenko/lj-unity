@@ -1,4 +1,4 @@
-﻿//#define USE_JSON_FX
+﻿#define USE_JSON_FX
 #if USE_JSON_FX
 
 using JsonFx.Json;
