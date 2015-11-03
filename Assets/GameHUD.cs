@@ -7,7 +7,13 @@ public class GameHUD : MonoBehaviour {
     private Lumberjack _lj;
 
     public AmmoCounter AmmoCounter;
+    public HealthBar HealthBar;
 
+    void Start()
+    {
+        AmmoCounter = GetComponentInChildren<AmmoCounter>();
+        HealthBar = GetComponentInChildren<HealthBar>();
+    }
 
     public void Init(Lumberjack lj)
     {
@@ -39,5 +45,10 @@ public class GameHUD : MonoBehaviour {
             AmmoCounter.Reload(x);
         };
     }
+
+    public void Update() {
+        HealthBar.SetHP(_lj.Hp.Normal);
+    }
+
 
 }

@@ -5,16 +5,17 @@ public class Lumberjack : Actor
 {
 
 
-	public LayerMask groundMask;
-	public bool Grounded = false;
-	public bool Moving = false;
-	public Transform grounder;
-	
+    public LayerMask groundMask;
+    public bool Grounded = false;
+    public bool Moving = false;
+    public Transform grounder;
+
     public Transform Body;
     public Transform Pivot;
 
+    public LumberjackHP Hp = new LumberjackHP();
 
-    
+
     public Vector2 PivotPosition
     {
         get
@@ -23,23 +24,50 @@ public class Lumberjack : Actor
         }
     }
     public Vector2 PivotScreenPosition;
-	public GameObject Hands;
+    public GameObject Hands;
 
-	public Animator Animator;
-	   
-	private Weapon _currentEquipContainer;
-	public Weapon[] AllEquipContainers;
+    public Animator Animator;
 
-	public float NormalMoveSpeed = 15;
-	public float NormalDrag = 1;
-	public float JumpDrag = 1;
+    private Weapon _currentEquipContainer;
+    public Weapon[] AllEquipContainers;
 
-	public Vector2 LiftPower;
-	public Vector2 NormalJump = new Vector2(0, 450);
+    public float NormalMoveSpeed = 15;
+    public float NormalDrag = 1;
+    public float JumpDrag = 1;
+
+    public Vector2 LiftPower;
+    public Vector2 NormalJump = new Vector2(0, 450);
 
     public event System.Action<Weapon> OnWeaponSwithced;
 
+    const int Alpha1 = (int)KeyCode.Alpha1;
+
     private int[] _ammo = new int[] { 100, 20, 30, 40 };
+
+
+    void Start()
+    {
+
+        var r = Hands.GetComponent<SpriteRenderer>();
+
+        var gun = (AllEquipContainers[0] as Gun);
+        gun.ReloadDelegate += ReloadAndCheck;
+
+        _currentEquipContainer = AllEquipContainers[0];
+
+        GunData gd = GameplayData.Instance.guns[0];
+        SelectWeapon(gd);
+
+        Animator = gameObject.GetComponent<Animator>();
+
+        foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
+
+        _localPivotPosition = transform.InverseTransformPoint(Pivot.transform.position);
+
+        ZStateBase.LjTransform = this.transform;
+
+    }
+
 
 
     public int ReloadAndCheck(GunData.EAmmo type, int max, bool withdraw)
@@ -47,57 +75,35 @@ public class Lumberjack : Actor
         var count = Mathf.Min(max, _ammo[(int)type]);
         if (withdraw)
         {
-            _ammo[(int)type] -= count;           
+            _ammo[(int)type] -= count;
         }
         return count;
     }
 
-	
-  
+    private void SelectWeapon(WeaponData wd)
+    {
 
-	void Start () {
+        Debug.Log("Switching to: " + wd.alias);
 
-        var r = Hands.GetComponent<SpriteRenderer>();
+        foreach (var container in AllEquipContainers)
+        {
+            if ((container.RelatedTypes & wd.type) == wd.type)
+            {
 
-        var gun = (AllEquipContainers[0] as Gun);
-        gun.ReloadDelegate += ReloadAndCheck;
-        
-		_currentEquipContainer = AllEquipContainers [0];
+                if (_currentEquipContainer != container)
+                {
+                    _currentEquipContainer.Kill();
+                    _currentEquipContainer = container;
+                    _currentEquipContainer.Init();
+                }
 
-		GunData gd = GameplayData.Instance.guns[0];
-        SelectWeapon(gd);
-
-		Animator = gameObject.GetComponent<Animator>();
-
-		foreach (var state in Animator.GetBehaviours<LJStateBase>()) state.lj = this;
-
-        _localPivotPosition =  transform.InverseTransformPoint(Pivot.transform.position);
-
-		ZStateBase.LjTransform = this.transform;
-
-	}
-
-	private void SelectWeapon(WeaponData wd){
-
-		Debug.Log ("Switching to: " + wd.alias);
-
-		foreach (var container in AllEquipContainers) {
-			if((container.RelatedTypes & wd.type) == wd.type){
-
-				if (_currentEquipContainer != container)
-				{
-					_currentEquipContainer.Kill();
-					_currentEquipContainer = container;
-					_currentEquipContainer.Init();
-				}
-
-				break;
-			}
-		}
+                break;
+            }
+        }
 
         _currentEquipContainer.SetWeapon(wd);
         if (OnWeaponSwithced != null) OnWeaponSwithced(_currentEquipContainer);
-	}
+    }
 
     private void OnMovementDirectionChanged(int dir)
     {
@@ -111,99 +117,123 @@ public class Lumberjack : Actor
         PivotScreenPosition = Camera.main.WorldToScreenPoint(transform.TransformPoint(_localPivotPosition));
         ViewDirection = PivotScreenPosition.x < Input.mousePosition.x ? 1 : -1;
 
-		int alpha1 = (int)KeyCode.Alpha1;
 
-		if (Input.anyKeyDown) {
-			for (int i = 0; i < 10; i++) {
-				if(Input.GetKey((KeyCode)(alpha1 + i))){
-					Debug.Log (i);
-					if (GameplayData.Instance.guns.Length > i){
-
-						SelectWeapon(GameplayData.Instance.guns[i]);
-					}else{
-						SelectWeapon(GameplayData.Instance.tools[i - GameplayData.Instance.guns.Length]);
-					}
-
-					break;
-				}
-			}
-		}
-
-
-	    var p = Grounded;
-		Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
-
-        if (!p && Grounded)
+        if (Input.anyKeyDown)
         {
-            //VFX
-            var dust = GameObject.Find("Dust").GetComponent<ParticleSystem>();
-            dust.transform.position = transform.position + Vector3.up * 0.05f;
-            dust.Play();            
+            for (int i = 0; i < 10; i++)
+            {
+                if (Input.GetKey((KeyCode)(Alpha1 + i)))
+                {
+
+                    if (GameplayData.Instance.guns.Length > i)
+                    {
+                        SelectWeapon(GameplayData.Instance.guns[i]);
+                    }
+                    else
+                    {
+                        SelectWeapon(GameplayData.Instance.tools[i - GameplayData.Instance.guns.Length]);
+                    }
+
+                    break;
+                }
+            }
         }
 
+        var p = Grounded;
+        Grounded = Physics2D.Linecast(transform.position, grounder.position, groundMask);
 
-		Animator.SetBool("moving", Input.GetAxis("Horizontal") != 0);
-		Animator.SetBool("jump", Input.GetAxis("Jump") != 0);
-		Animator.SetBool("grounded", Grounded);
-        
+        Animator.SetBool("moving", Input.GetAxis("Horizontal") != 0);
+        Animator.SetBool("jump", Input.GetAxis("Jump") != 0);
+        Animator.SetBool("grounded", Grounded);
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        var layer = LayerMask.LayerToName(collision.gameObject.layer);
+        if (layer == "Ground")
+            VFX.Instance.Effects[1].Play(collision.contacts[0].point + Vector2.up * 0.2f, 0);
     }
 
     private int viewDirection;
     public int ViewDirection
     {
         get { return viewDirection; }
-        set {
+        set
+        {
 
             if (viewDirection != value)
             {
                 viewDirection = value;
-				Body.localScale = new Vector3(value * LegsOrientation, 1, 1);
-            }            
+                Body.localScale = new Vector3(value * LegsOrientation, 1, 1);
+            }
         }
     }
 
-	private int legsOrientation = 1;
+    private int legsOrientation = 1;
 
 
-	public int LegsOrientation
-	{
-		get { return legsOrientation; }
-		set
+    public int LegsOrientation
+    {
+        get { return legsOrientation; }
+        set
         {
 
-			if (legsOrientation != value)
+            if (legsOrientation != value)
             {
-				legsOrientation = value;
-	            OnMovementDirectionChanged(value);
+                legsOrientation = value;
+                OnMovementDirectionChanged(value);
                 transform.localScale = new Vector3(value, 1, 1);
             }
         }
-	}
+    }
 
 
-	public void Jump()
-	{
-		if (Grounded)
-		{
-			//_rigidbody2D.AddForce(NormalJump);
-			_rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, NormalJump.y * Time.fixedDeltaTime);
-		
-		}
-        
+    public void Jump()
+    {
+        if (Grounded)
+        {
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, NormalJump.y * Time.fixedDeltaTime);
+        }
+    }
 
-			//
-	}
+    public void Stop()
+    {
 
-	public void Stop()
-	{
-		//_rigidbody2D.velocity = new Vector2(0, _rigidbody2D.velocity.y);
-	}
+    }
 
-	public void HorizontalMove(int d, float normalMoveSpeed)
-	{
-		_rigidbody2D.velocity = new Vector2(normalMoveSpeed * d, _rigidbody2D.velocity.y);
-		LegsOrientation = d;
-	}
+    public void HorizontalMove(int d, float normalMoveSpeed)
+    {
+        _rigidbody2D.velocity = new Vector2(normalMoveSpeed * d, _rigidbody2D.velocity.y);
+        LegsOrientation = d;
+    }
 
-	
+
+
+    public class HP
+    {
+
+        public float current = 100;
+        public float max = 100;
+
+        public bool IsAlive
+        {
+            get
+            {
+                return current > 0;
+            }
+        }
+
+        public float Normal
+        {
+            get { return current / max; }
+        }
+    }
+
+    public class LumberjackHP : HP
+    {
+
+    }
+
+
+
 }

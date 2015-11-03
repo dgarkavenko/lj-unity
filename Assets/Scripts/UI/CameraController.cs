@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
 
     static int PIXELS_IN_METER = 10;
-
+    static float HEIGHT;
     Camera cam;
 
     public bool Follow;
@@ -23,13 +23,16 @@ public class CameraController : MonoBehaviour {
         cam = GetComponent<Camera>();
         cam.orthographicSize = Screen.height * 0.5f / Scale / PIXELS_IN_METER;
         _width = Screen.width * 0.5f / PIXELS_IN_METER / Scale;
-	}
+
+        _newPosition.y = Screen.height * 0.5f / PIXELS_IN_METER / Scale - 3.2f; //3.2f stands for ground height
+     
+    }
 
 	void LateUpdate()
 	{
         if (Target == null || !Follow) return;
 
-        _newPosition.y = transform.position.y;
+        
         _newPosition.x = Snap ? (float)System.Math.Round(Target.position.x, 1, System.MidpointRounding.ToEven) : Target.position.x;
         _newPosition.x = Mathf.Clamp(_newPosition.x, Bounds.x + _width, Bounds.y - _width);
 

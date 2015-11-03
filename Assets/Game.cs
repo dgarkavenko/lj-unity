@@ -43,7 +43,7 @@ public class Game : MonoBehaviour {
 [System.Serializable]
 public class World
 {
-    private float _currentTime;
+    private float _currentTime = 36000;
     public float TimeScale = 360;
     public string Time;
     public Light Sun;

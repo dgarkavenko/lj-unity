@@ -68,8 +68,11 @@ public class Gun : Weapon
 
         dirPolar = Mathf.Atan2(Input.mousePosition.y - Lumberjack.PivotScreenPosition.y, Input.mousePosition.x - Lumberjack.PivotScreenPosition.x);
 
-		//Recoil reduction
-		if (recoil > 0) {
+        var fullDispersion = (gd.dispersion + recoil);
+        Crosshair.Instance.Size = Mathf.Tan(fullDispersion) * Vector2.Distance(Input.mousePosition, Lumberjack.PivotScreenPosition) * 2;
+
+        //Recoil reduction
+        if (recoil > 0) {
 			recoil -= gd.recoilReduction;		
 		}
 
@@ -153,8 +156,12 @@ public class Gun : Weapon
 	        hitPoint = hit.point;
         }
 
-		VFX.Instance.Effects[0].Play(origin, -dirPolar, GunpointPosition);
-	}
+        recoil = Mathf.Clamp(recoil + gd.recoilPerShot, 0, gd.recoilPerShot * 3);
+
+        VFX.Instance.Effects[0].Play(origin, -dirPolar, GunpointPosition);
+        VFX.Instance.Trace.Show(origin + dir * 2, hitPoint);
+
+    }
 
 	public Vector2 GunpointPosition()
 	{

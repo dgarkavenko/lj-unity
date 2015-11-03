@@ -6,9 +6,6 @@ using Object = UnityEngine.Object;
 
 public class VFX : MonoBehaviour {
 
-   
-
-
     [System.Serializable]
     public class LJEffect {        
 
@@ -54,9 +51,6 @@ public class VFX : MonoBehaviour {
 
 
         public void Off() {
-            Debug.Log("Off");
-
-            Light.intensity = 0;
         }
 
         public void Play(Vector3 position, float rotation, PositionDelegate positionDelegate = null, float count = -1)
@@ -70,24 +64,25 @@ public class VFX : MonoBehaviour {
 
             _getTargetPosition = positionDelegate;
 
-
             if (Follow != null)
             {
                 Follow.transform.position = position;
                 Follow.startRotation = rotation;
-                Follow.Play();
+                Follow.Play(true);
             }
 
             if(Burst != null)
             {
                 ParticleSystem.Particle _particle = new ParticleSystem.Particle();
                 _particle.position = position;
+                _particle.color = Color.white;
 
                 var ln = count > 0 ? count : Count.RandomInt();
 
+                var m = (rotation < Mathf.PI / 2 && rotation > -Mathf.PI / 2) ? -1 : 1;
                 for (int i = 0; i < (ln); i++)
                 {
-                    _particle.velocity = GetRandomVelocity(rotation);
+                    _particle.velocity = GetRandomVelocity(-rotation, m);
                     _particle.lifetime = _particle.startLifetime = Lifetime.RandomFloat();
                     _particle.size = Size.RandomFloat();
                     Burst.Emit(_particle);
@@ -97,14 +92,15 @@ public class VFX : MonoBehaviour {
            
         }
 
-        Vector2 GetRandomVelocity(float inputDirection)
+        Vector2 GetRandomVelocity(float inputDirection, int m = 1)
         {
-            var dirPolarWDispersion = inputDirection + Spread.RandomFloat();
+            var dirPolarWDispersion = inputDirection + Spread.RandomFloat() * m;
             return new Vector2(Mathf.Cos(dirPolarWDispersion), Mathf.Sin(dirPolarWDispersion)) * Speed.RandomFloat();
         }
     }
 
     public LJEffect[] Effects;
+    public Trace Trace;
 
 	private static VFX _instance;
 	public static VFX Instance
